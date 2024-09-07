@@ -2,8 +2,11 @@ package org.skypro.be.quizmaster.model;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
+@Entity
+@Table(name = "app_user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,6 +47,11 @@ public class User {
     }
 
     public void setRoles(Set<String> roles) {
-        this.roles = roles;
+        this.roles = new HashSet<>(roles);
+    }
+
+    @Override
+    public String toString() {
+        return this.username;
     }
 }
