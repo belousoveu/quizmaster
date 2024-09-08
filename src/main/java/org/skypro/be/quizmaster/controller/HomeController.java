@@ -6,14 +6,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.security.Principal;
+
 @Controller
 public class HomeController {
 
 
     @GetMapping("/home")
-    public String home(@AuthenticationPrincipal UserDetails userDetails, Model model) {
-        model.addAttribute("username", userDetails.getUsername());
-        model.addAttribute("roles", userDetails.getAuthorities());
+    public String home(Principal principal, Model model) {
+        if (principal != null) {
+            model.addAttribute("username", principal.getName());
+        } else {
+            model.addAttribute("username", "Гость");
+        }
         return "home";
     }
 }
