@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
+<head th:replace="~{fragments :: head}"></head>
+<body>
+<div th:replace="~{fragments :: header}"></div>
+<h3 th:text="${title}"></h3>
+<div th:if="${errors!=null}" th:each="erros : ${errors}" style="background-color: red; padding: 5px;">
+    <span th:text="${erros}"></span>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <form th:action="@{/question/{sect}/add(sect=${section})}" method="post" th:object="${question}">
+                <div class="form-group">
+                    <label for="textQuestion">Введите текст вопроса</label>
+                    <textarea class="form-control" name="textQuestion" id="textQuestion" placeholder="Вопрос" rows="6"
+                              th:field="*{textQuestion}">
+                    </textarea><br>
+                    <div id="answerContainer">
+                        <div th:if="${#sets.isEmpty(question.answers)}" class="row">
+                            <div class="col-1">
+                                <input type="checkbox" name="answers[0].isCorrect" class="isCorrect form-check-input"
+                                       checked="checked"/>
+                            </div>
+                            <div class="col-9">
+                                <input type="text" name="answers[0].textAnswer" class="textAnswer form-control"/>
+                            </div>
+                            <div class="col-2">
+                                <button type="button" class="btn btn-danger btn-sm delete-btn"
+                                        onclick="deleteAnswer(this)">
+                                    Удалить
+                                </button>
+                            </div>
+                            <br/>
+                        </div>
+                        <div th:if="${not #sets.isEmpty(question.answers)}" class="row"
+                             th:each="answer, iter : ${question.answers}">
+                            <div class="col-1">
+                                <input type="checkbox" name="answers[].isCorrect" class="isCorrect form-check-input"
+                                       th:field="*{answers[__${iter.index}__].isCorrect}"
+                                       th:checked="*{answers[__${iter.index}__].isCorrect}"/>
+                            </div>
+                            <div class="col-9">
+                                <input type="text" name="answers[__${iter.index}__].textAnswer"
+                                       class="textAnswer form-control"
+                                       th:field="*{answers[__${iter.index}__].textAnswer}"/>
+                            </div>
+                            <div class="col-2">
+                                <button type="button" class="btn btn-danger btn-sm delete-btn"
+                                        onclick="deleteAnswer(this)">
+                                    Удалить
+                                </button>
+                            </div>
+                            <br/>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-2">
+                    <button type="button" class="btn btn-success" onclick="addAnswer()">Добавить вариант ответа
+                    </button>
+                </div>
+                <br>
+                <div class="p-2">
+                    <button type="submit" class="btn btn-primary">Сохранить вопрос</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-6">
+
+        </div>
+    </div>
+</div>
+
+<script defer>
+    function addAnswer() {
+        var container = document.getElementById('answerContainer');
+
+        var newAnswerDiv = document.createElement('div');
+        newAnswerDiv.className = 'row';
+
+        var index = container.children.length;
+        var checkboxDiv = document.createElement('div');
+        checkboxDiv.className = 'col-1';
+        var inputDiv = document.createElement('div');
+        inputDiv.className = 'col-9';
+        var buttonDiv = document.createElement('div');
+        buttonDiv.className = 'col-2';
+
+        var inputText = document.createElement('input');
+        inputText.type = 'text';
+        inputText.name = 'answers['+ index + '].textAnswer';
+        inputText.className = 'textAnswer form-control';
+
+        inputDiv.appendChild(inputText);
+
+        var inputCheckbox = document.createElement('input');
+        inputCheckbox.type = 'checkbox';
+        inputCheckbox.name = 'answers['+ index + '].isCorrect';
+        inputCheckbox.className = 'isCorrect form-check-input';
+        inputCheckbox.checked = false;
+
+        checkboxDiv.appendChild(inputCheckbox);
+
+        var deleteButton = document.createElement('button');
+        deleteButton.type = 'button';
+        deleteButton.className = 'btn btn-danger btn-sm delete-btn';
+        deleteButton.innerText = 'Удалить';
+        deleteButton.onclick = function() {
+            deleteAnswer(this);
+        };
+        buttonDiv.appendChild(deleteButton);
+
+        var br = document.createElement('br');
+
+        newAnswerDiv.appendChild(checkboxDiv);
+        newAnswerDiv.appendChild(inputDiv);
+        newAnswerDiv.appendChild(buttonDiv);
+        newAnswerDiv.appendChild(br);
+
+        container.appendChild(newAnswerDiv);
+    }
+    function deleteAnswer(button) {
+        var container = document.getElementById('answerContainer');
+        var buttonDiv = button.parentNode;
+        var answerDiv = buttonDiv.parentNode;
+
+        container.removeChild(answerDiv);
+    }
+</script>
+<div th:replace="~{fragments :: footer}"></div>
+
+</body>
+</html>

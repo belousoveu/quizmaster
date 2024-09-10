@@ -7,8 +7,6 @@ import org.skypro.be.quizmaster.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,11 +21,6 @@ public class RegistrationController {
     @Autowired
     private UserService userService; //TODO Поменять на интерфейс
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private ApplicationEventPublisher applicationEventPublisher;
 
     @GetMapping("")
     public String showRegistrationForm(Model model) {
