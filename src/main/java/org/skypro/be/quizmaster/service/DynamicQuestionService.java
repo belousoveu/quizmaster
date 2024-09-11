@@ -15,7 +15,11 @@ public abstract class DynamicQuestionService implements QuestionService{
     private QuestionRepository questionRepository;
 
     @Override
-    public List<Question> getQuestions(Section section) {
+    public List<Question> getQuestions() {
+        throw new UnsupportedOperationException();
+    }
+
+    public Question createQuestion() {
         throw new UnsupportedOperationException();
     }
 

@@ -5,6 +5,11 @@ import org.skypro.be.quizmaster.model.Section;
 import org.springframework.stereotype.Service;
 
 @Service
-@QuestionServiceSection(Section.MATH)
-public class MathQuestionService extends DynamicQuestionService {
+@QuestionServiceSection(Section.JAVA)
+public class JavaQuestionService extends ManualQuestionService {
+    public JavaQuestionService() {
+        super(Section.JAVA);
+    }
+
+
 }

@@ -9,18 +9,27 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ManualQuestionService implements QuestionService {
+public abstract class ManualQuestionService implements QuestionService {
+    private final boolean AutomaticQuestionGenerated = false;
+    protected Section section;
 
     @Autowired
     private QuestionRepository questionRepository;
 
-//
-//    public ManualQuestionService(QuestionRepository questionRepository) {
-//        this.questionRepository = questionRepository;
-//    }
+    public ManualQuestionService() {
+    }
+
+    public ManualQuestionService(Section section) {
+        this.section = section;
+    }
 
     @Override
-    public List<Question> getQuestions(Section section) {
+    public Question createQuestion() {
+        return new Question(section);
+    }
+
+    @Override
+    public List<Question> getQuestions() {
         return questionRepository.findAll().stream()
                 .filter(question -> question.getSection().equals(section)).toList();
 

@@ -8,15 +8,12 @@ import java.util.List;
 
 public interface SectionService {
 
-    Question createQuestion(Section section);
-
-    List<Question> getQuestions(Section section);
 
     String getDescription(String section);
-
-    void addQuestion(Question question);
 
     List<String> errors(Question question);
 
     List<Section> getSections();
+
+    QuestionService getService(Section section);
 }

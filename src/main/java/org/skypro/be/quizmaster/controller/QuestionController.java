@@ -2,7 +2,7 @@ package org.skypro.be.quizmaster.controller;
 
 import org.skypro.be.quizmaster.model.Question;
 import org.skypro.be.quizmaster.model.Section;
-import org.skypro.be.quizmaster.service.QuestionServiceImp;
+import org.skypro.be.quizmaster.service.QuestionService;
 import org.skypro.be.quizmaster.service.SectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,17 +18,21 @@ public class QuestionController {
     @Autowired
     private SectionService sectionService;
 
+    private QuestionService questionService;
+
     @GetMapping("/{section}")
     public String getQuestionsBySection(@PathVariable("section") Section section, Model model) {
+        questionService = sectionService.getService(section);
         model.addAttribute("section", section);
         model.addAttribute("title", "Раздел: "+section.getDescription());
-        model.addAttribute("questions", sectionService.getQuestions(section));
+        model.addAttribute("questions", questionService.getQuestions());
         return "question/questions";
     }
 
     @GetMapping("/{section}/add")
     public String newQuestion(@PathVariable("section") Section section, Model model) {
-        Question question = sectionService.createQuestion(section);
+        questionService = sectionService.getService(section);
+        Question question = questionService.createQuestion();
         model.addAttribute("section", section.getName());
         model.addAttribute("title", "Добавить вопрос в раздел: " + section.getDescription());
         model.addAttribute("question", question);
@@ -45,7 +49,8 @@ public class QuestionController {
             model.addAttribute("question", question);
             return "question/addQuestion";
         }
-        sectionService.addQuestion(question);
+        questionService = sectionService.getService(section);
+        questionService.addQuestion(question);
         return "redirect:/question/" + section.getName();
     }
 
