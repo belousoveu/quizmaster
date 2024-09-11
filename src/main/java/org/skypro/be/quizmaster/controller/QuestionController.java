@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -45,15 +46,25 @@ public class QuestionController {
     public String editQuestion(@PathVariable("section") Section section, @PathVariable("id") Long id, Model model) {
         questionService = sectionService.getService(section);
         Question question = questionService.getQuestion(id);
-        System.out.println("Before edition question.getId() = " + question.getId());
         model.addAttribute("section", section.getName());
         model.addAttribute("title", "Редактирование вопроса: " + section.getDescription());
         model.addAttribute("question", question);
         return "question/question-form";
     }
 
+    @GetMapping("/{section}/{id}/delete")
+    public String deleteQuestion(@PathVariable("section") Section section, @PathVariable("id") Long id,
+                                 RedirectAttributes redirectAttributes, Model model) {
+
+        questionService = sectionService.getService(section);
+        redirectAttributes.addFlashAttribute("deleteMessage", "Удален вопрос id=" + id);
+        questionService.deleteQuestion(id);
+        return "redirect:/question/" + section.getName();
+    }
+
     @PostMapping("/{section}/save")
-    public String addQuestion(@PathVariable("section") Section section, @ModelAttribute("question") QuestionDto questionDto, Model model) {
+    public String addQuestion(@PathVariable("section") Section section, @ModelAttribute("question") QuestionDto questionDto,
+                              RedirectAttributes redirectAttributes, Model model) {
         List<String> errors = sectionService.errors(questionDto);
         if (!errors.isEmpty()) { //TODO Переделать валидацию
             model.addAttribute("errors", errors);
@@ -63,9 +74,9 @@ public class QuestionController {
             return "question/question-form";
         }
         questionService = sectionService.getService(section);
-        System.out.println("questionDto.getId() = " + questionDto.getId());
+        String updatedMessage = questionDto.getId()==null ? "Добавлен новый вопрос" : "Изменен вопрос id=" + questionDto.getId();
+        redirectAttributes.addFlashAttribute("updateMessage", updatedMessage);
         Question question = QuestionMapper.toEntity(questionDto);
-        System.out.println("question.getId() = " + question.getId());
         questionService.saveQuestion(question);
         return "redirect:/question/" + section.getName();
     }

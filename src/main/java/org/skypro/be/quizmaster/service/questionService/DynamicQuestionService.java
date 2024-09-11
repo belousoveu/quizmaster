@@ -32,4 +32,9 @@ public abstract class DynamicQuestionService implements QuestionService{
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public void deleteQuestion(Long id) {
+        throw new UnsupportedOperationException();
+    }
+
 }

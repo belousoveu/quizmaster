@@ -45,5 +45,10 @@ public abstract class ManualQuestionService implements QuestionService {
         return questionRepository.findById(id).orElseThrow(()->new IllegalArgumentException("Question not found"));
     }
 
+    @Override
+    public void deleteQuestion(Long id) {
+        questionRepository.deleteById(id);
+    }
+
 }
 
