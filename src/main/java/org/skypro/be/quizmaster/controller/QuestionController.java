@@ -1,8 +1,10 @@
 package org.skypro.be.quizmaster.controller;
 
+import org.skypro.be.quizmaster.converter.QuestionMapper;
 import org.skypro.be.quizmaster.model.Question;
+import org.skypro.be.quizmaster.model.QuestionDto;
 import org.skypro.be.quizmaster.model.Section;
-import org.skypro.be.quizmaster.service.QuestionService;
+import org.skypro.be.quizmaster.service.questionService.QuestionService;
 import org.skypro.be.quizmaster.service.SectionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,23 +36,37 @@ public class QuestionController {
         questionService = sectionService.getService(section);
         Question question = questionService.createQuestion();
         model.addAttribute("section", section.getName());
-        model.addAttribute("title", "Добавить вопрос в раздел: " + section.getDescription());
+        model.addAttribute("title", "Создание нового вопроса: " + section.getDescription());
         model.addAttribute("question", question);
-        return "question/addQuestion";
+        return "question/question-form";
     }
 
-    @PostMapping("/{section}/add")
-    public String addQuestion(@PathVariable("section") Section section, @ModelAttribute("question") Question question, Model model) {
-        List<String> errors = sectionService.errors(question);
-        if (!errors.isEmpty()) {
+    @GetMapping("/{section}/{id}/edit")
+    public String editQuestion(@PathVariable("section") Section section, @PathVariable("id") Long id, Model model) {
+        questionService = sectionService.getService(section);
+        Question question = questionService.getQuestion(id);
+        System.out.println("Before edition question.getId() = " + question.getId());
+        model.addAttribute("section", section.getName());
+        model.addAttribute("title", "Редактирование вопроса: " + section.getDescription());
+        model.addAttribute("question", question);
+        return "question/question-form";
+    }
+
+    @PostMapping("/{section}/save")
+    public String addQuestion(@PathVariable("section") Section section, @ModelAttribute("question") QuestionDto questionDto, Model model) {
+        List<String> errors = sectionService.errors(questionDto);
+        if (!errors.isEmpty()) { //TODO Переделать валидацию
             model.addAttribute("errors", errors);
             model.addAttribute("section", section.getName());
             model.addAttribute("title", "Добавить в раздел: " + section.getDescription());
-            model.addAttribute("question", question);
-            return "question/addQuestion";
+            model.addAttribute("question", questionDto);
+            return "question/question-form";
         }
         questionService = sectionService.getService(section);
-        questionService.addQuestion(question);
+        System.out.println("questionDto.getId() = " + questionDto.getId());
+        Question question = QuestionMapper.toEntity(questionDto);
+        System.out.println("question.getId() = " + question.getId());
+        questionService.saveQuestion(question);
         return "redirect:/question/" + section.getName();
     }
 

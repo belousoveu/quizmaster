@@ -1,9 +1,9 @@
 package org.skypro.be.quizmaster.service;
 
-import org.skypro.be.quizmaster.model.Question;
+import org.skypro.be.quizmaster.model.QuestionDto;
 import org.skypro.be.quizmaster.model.Section;
+import org.skypro.be.quizmaster.service.questionService.QuestionService;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface SectionService {
@@ -11,7 +11,7 @@ public interface SectionService {
 
     String getDescription(String section);
 
-    List<String> errors(Question question);
+    List<String> errors(QuestionDto question);
 
     List<Section> getSections();
 

@@ -1,4 +1,4 @@
-package org.skypro.be.quizmaster.service;
+package org.skypro.be.quizmaster.service.questionService;
 
 import org.skypro.be.quizmaster.model.Question;
 
@@ -10,5 +10,7 @@ public interface QuestionService {
 
     Question createQuestion();
 
-    void addQuestion(Question question);
+    void saveQuestion(Question question);
+
+    Question getQuestion(Long id);
 }

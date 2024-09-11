@@ -1,4 +1,4 @@
-package org.skypro.be.quizmaster.service;
+package org.skypro.be.quizmaster.service.questionService;
 
 import org.skypro.be.quizmaster.model.Question;
 import org.skypro.be.quizmaster.model.Section;
@@ -36,8 +36,13 @@ public abstract class ManualQuestionService implements QuestionService {
     }
 
     @Override
-    public void addQuestion(Question question) {
+    public void saveQuestion(Question question) {
         questionRepository.save(question);
+    }
+
+    @Override
+    public Question getQuestion(Long id) {
+        return questionRepository.findById(id).orElseThrow(()->new IllegalArgumentException("Question not found"));
     }
 
 }

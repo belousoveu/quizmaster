@@ -11,8 +11,10 @@
 <div class="container">
     <div class="row">
         <div class="col-6">
-            <form th:action="@{/question/{sect}/add(sect=${section})}" method="post" th:object="${question}">
+            <form th:action="@{/question/{sect}/save(sect=${section})}" method="post" th:object="${question}">
                 <div class="form-group">
+                    <label for="QuestionId"></label>
+                    <input type="hidden" th:field="*{id}" class="form-control" id="QuestionId" placeholder="QuestionId">
                     <label for="textQuestion">Введите текст вопроса</label>
                     <textarea class="form-control" name="textQuestion" id="textQuestion" placeholder="Вопрос" rows="6"
                               th:field="*{textQuestion}">

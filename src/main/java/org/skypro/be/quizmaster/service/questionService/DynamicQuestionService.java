@@ -1,7 +1,6 @@
-package org.skypro.be.quizmaster.service;
+package org.skypro.be.quizmaster.service.questionService;
 
 import org.skypro.be.quizmaster.model.Question;
-import org.skypro.be.quizmaster.model.Section;
 import org.skypro.be.quizmaster.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,12 @@ public abstract class DynamicQuestionService implements QuestionService{
     }
 
     @Override
-    public void addQuestion(Question question) {
+    public void saveQuestion(Question question) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Question getQuestion(Long id) {
         throw new UnsupportedOperationException();
     }
 

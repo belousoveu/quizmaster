@@ -3,8 +3,9 @@ package org.skypro.be.quizmaster.service;
 import org.skypro.be.quizmaster.annotation.QuestionServiceSection;
 import org.skypro.be.quizmaster.converter.StringToSectionConverter;
 import org.skypro.be.quizmaster.model.Answer;
-import org.skypro.be.quizmaster.model.Question;
+import org.skypro.be.quizmaster.model.QuestionDto;
 import org.skypro.be.quizmaster.model.Section;
+import org.skypro.be.quizmaster.service.questionService.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +46,7 @@ public class SectionServiceImp implements SectionService {
     }
 
     @Override
-    public List<String> errors(Question question) {
+    public List<String> errors(QuestionDto question) {
         List<String> errors = new ArrayList<>();
         if (question.getTextQuestion() == null || question.getTextQuestion().trim().isEmpty()) {
             errors.add("Текст вопроса должен быть заполнен");
