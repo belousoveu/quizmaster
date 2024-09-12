@@ -1,7 +1,6 @@
 package org.skypro.be.quizmaster.service;
 
 import org.skypro.be.quizmaster.annotation.QuestionServiceSection;
-import org.skypro.be.quizmaster.converter.StringToSectionConverter;
 import org.skypro.be.quizmaster.model.Answer;
 import org.skypro.be.quizmaster.model.QuestionDto;
 import org.skypro.be.quizmaster.model.Section;
@@ -15,12 +14,10 @@ import java.util.stream.Collectors;
 @Service
 public class SectionServiceImp implements SectionService {
 
-    private QuestionService questionService;
-
     private final Map<Section, QuestionService> serviceMap;
 
     @Autowired
-    public SectionServiceImp(Map<String, QuestionService> serviceMap, StringToSectionConverter converter) {
+    public SectionServiceImp(Map<String, QuestionService> serviceMap) {
         this.serviceMap = serviceMap.entrySet().stream()
                 .collect(Collectors.toMap(
                         e -> getSection(e.getValue()),
@@ -40,10 +37,11 @@ public class SectionServiceImp implements SectionService {
         return annotation.value();
     }
 
-    @Override
-    public String getDescription(String section) {
-        return Section.valueOf(section.toUpperCase()).getDescription();
-    }
+//    @Override
+//    public String getDescription(String section) {
+//
+//        return Section.valueOf(section.toUpperCase()).getDescription();
+//    }
 
     @Override
     public List<String> errors(QuestionDto question) {

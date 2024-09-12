@@ -9,7 +9,7 @@ import java.util.List;
 public interface SectionService {
 
 
-    String getDescription(String section);
+//    String getDescription(String section);
 
     List<String> errors(QuestionDto question);
 
