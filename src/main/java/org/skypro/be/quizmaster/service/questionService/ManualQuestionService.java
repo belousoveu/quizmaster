@@ -1,12 +1,14 @@
 package org.skypro.be.quizmaster.service.questionService;
 
 import org.skypro.be.quizmaster.model.Question;
+import org.skypro.be.quizmaster.model.QuestionType;
 import org.skypro.be.quizmaster.model.Section;
 import org.skypro.be.quizmaster.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public abstract class ManualQuestionService implements QuestionService {
@@ -50,5 +52,8 @@ public abstract class ManualQuestionService implements QuestionService {
         questionRepository.deleteById(id);
     }
 
+    public Question getRandomQuestion(List<QuestionType> types) {
+        return new Question(section);
+    }
 }
 

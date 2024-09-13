@@ -8,17 +8,23 @@
     <h4 th:text="${title}"></h4>
 </div>
 <div class="container">
-    <form th:action="@{/setup}" method="post" th:object="${examSetup}" class="form">
+    <form th:action="@{/exam/setup}" method="post" th:object="${examSettings}" class="form">
         <div class="row">
             <div class="col-md-6 card">
                 <div class="card-title border rounded form-group border-success mb-2 p-2">
                     Укажите разделы для тестирования:
                 </div>
                 <div class="card-body">
-                    <div class="form-group" th:each="entry : *{selectedSections}">
+                    <div class="form-group" th:each="entry : ${examSettings.selectedSections}">
                         <div class="row">
-                            <label th:for="${entry.key.getName()}" th:text="${entry.key.description}" class="form-label"></label>
-                            <input type="checkbox" th:id="${entry.key.getName()}" th:value="${entry.value}" class="form-check" checked>
+                            <div class="col">
+                                <label th:for="${entry.key.getName()}" th:text="${entry.key.description}"
+                                       class="form-label"></label>
+                            </div>
+                            <div class="col">
+                                <input type="checkbox" th:id="${entry.key.getName()}" th:name="|selectedSections[${entry.key.getName()}]|"
+                                       th:value="${entry.value}" class="form-check" checked>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -27,13 +33,14 @@
                 <div class="form-group">
                     <label for="numberOfQuestions" class="form-label">Количество вопросов:</label>
                     <input type="number" class="form-control" id="numberOfQuestions"
-                           th:value="${numberOfQuestions}" min="3" max="10" required>
+                           th:field="*{numberOfQuestions}" min="3" max="10" required>
                 </div>
                 <div class="card-title">Выберете типы вопросов:</div>
-                <div class="form-group" th:each="entry : *{selectedTypes}">
+                <div class="form-group" th:each="entry : ${examSettings.selectedTypes}">
                     <div class="row">
                         <label th:for="${entry.key}" th:text="${entry.key.getName()}" class="form-label"></label>
-                        <input type="checkbox" th:id="${entry.key}" th:value="${entry.value}" class="form-check" checked>
+                        <input type="checkbox" th:id="${entry.key}" th:name="|selectedTypes[${entry.key}]|"
+                               th:value="${entry.value}" class="form-check" checked>
                     </div>
                 </div>
             </div>

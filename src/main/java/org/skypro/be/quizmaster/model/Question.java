@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Entity
@@ -66,5 +67,18 @@ public class Question {
     public String toString() {
         return section.getName() + " " + textQuestion + "\n" + answers.toString();
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Question question = (Question) o;
+        return Objects.equals(id, question.id) && Objects.equals(textQuestion, question.textQuestion) && section == question.section;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, textQuestion, section);
     }
 }
