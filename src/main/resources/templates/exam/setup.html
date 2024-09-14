@@ -1,58 +1,63 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head th:replace="~{fragments :: head}"></head>
-<body>
-<div th:replace="~{fragments :: header}"></div>
+<body style="height: 100%">
+<div style="display: flex; flex-direction: column; height: 100vh;">
+    <div th:replace="~{fragments :: header}"></div>
+    <div style="flex: 1; overflow-y: auto; padding: 1rem;">
 
-<div class="container">
-    <h4 th:text="${title}"></h4>
-</div>
-<div class="container">
-    <form th:action="@{/exam/setup}" method="post" th:object="${examSettings}" class="form">
-        <div class="row">
-            <div class="col-md-6 card">
-                <div class="card-title border rounded form-group border-success mb-2 p-2">
-                    Укажите разделы для тестирования:
-                </div>
-                <div class="card-body">
-                    <div class="form-group" th:each="entry : ${examSettings.selectedSections}">
-                        <div class="row">
-                            <div class="col">
-                                <label th:for="${entry.key.getName()}" th:text="${entry.key.description}"
-                                       class="form-label"></label>
+        <div class="container">
+            <h4 th:text="${title}"></h4>
+        </div>
+        <div class="container">
+            <form th:action="@{/exam/setup}" method="post" th:object="${examSettings}" class="form">
+                <div class="row">
+                    <div class="col-md-6 card">
+                        <div class="card-title border rounded form-group border-success mb-2 p-2">
+                            Укажите разделы для тестирования:
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group" th:each="entry : ${examSettings.selectedSections}">
+                                <div class="row">
+                                    <div class="col">
+                                        <label th:for="${entry.key.getName()}" th:text="${entry.key.description}"
+                                               class="form-label"></label>
+                                    </div>
+                                    <div class="col">
+                                        <input type="checkbox" th:id="${entry.key.getName()}"
+                                               th:name="|selectedSections[${entry.key.getName()}]|"
+                                               th:value="${entry.value}" class="form-check" checked>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col">
-                                <input type="checkbox" th:id="${entry.key.getName()}" th:name="|selectedSections[${entry.key.getName()}]|"
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="numberOfQuestions" class="form-label">Количество вопросов:</label>
+                            <input type="number" class="form-control" id="numberOfQuestions"
+                                   th:field="*{numberOfQuestions}" min="3" max="10" required>
+                        </div>
+                        <div class="card-title">Выберете типы вопросов:</div>
+                        <div class="form-group" th:each="entry : ${examSettings.selectedTypes}">
+                            <div class="row">
+                                <label th:for="${entry.key}" th:text="${entry.key.getName()}"
+                                       class="form-label"></label>
+                                <input type="checkbox" th:id="${entry.key}" th:name="|selectedTypes[${entry.key}]|"
                                        th:value="${entry.value}" class="form-check" checked>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="numberOfQuestions" class="form-label">Количество вопросов:</label>
-                    <input type="number" class="form-control" id="numberOfQuestions"
-                           th:field="*{numberOfQuestions}" min="3" max="10" required>
-                </div>
-                <div class="card-title">Выберете типы вопросов:</div>
-                <div class="form-group" th:each="entry : ${examSettings.selectedTypes}">
-                    <div class="row">
-                        <label th:for="${entry.key}" th:text="${entry.key.getName()}" class="form-label"></label>
-                        <input type="checkbox" th:id="${entry.key}" th:name="|selectedTypes[${entry.key}]|"
-                               th:value="${entry.value}" class="form-check" checked>
+                <div class="row">
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="Начать тестирование">
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
-        <div class="row">
-            <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Начать тестирование">
-            </div>
-        </div>
-    </form>
+    </div>
+    <div th:replace="~{fragments :: footer}"></div>
 </div>
-
-<div th:replace="~{fragments :: footer}"></div>
 </body>
 </html>

@@ -1,53 +1,60 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ru">
 <head th:replace="~{fragments :: head}"></head>
-<body>
-<div th:replace="~{fragments :: header}"></div>
+<body style="height: 100%">
+<div style="display: flex; flex-direction: column; height: 100vh;">
+    <div th:replace="~{fragments :: header}"></div>
+    <div style="flex: 1; overflow-y: auto; padding: 1rem;">
+        <div class="container">
+            <h4 th:text="${title}"></h4>
+        </div>
+        <div th:if="${updateMessage != null}" class="container">
+            <div th:text="${updateMessage}"
+                 class="col-md-8 border rounded mb-2 p-2 border-success border-3 fw-bold"></div>
+        </div>
+        <div th:if="${deleteMessage!= null}" class="container">
+            <div th:text="${deleteMessage}"
+                 class="col-md-8 border rounded mb-2 p-2 border-danger border-3 fw-bold"></div>
+        </div>
+        <div class="container">
+            <div class="col-md-8 border rounded p-2 border-secondary">
+                <div th:if="${dynamicMessage != null}">
+                    <div th:utext="${dynamicMessage}" class="text-center"></div>
+                </div>
+                <div sec:authorize="hasRole('ROLE_ADMIN')" class="container py-3">
+                    <a th:unless="${dynamicMessage != null}" th:href="@{/question/{sect}/add(sect=${section.name})}"
+                       class="btn btn-primary">Добавить новый вопрос</a>
+                </div>
+                <div th:unless="${dynamicMessage != null}">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Текст вопроса</th>
+                            <th sec:authorize="hasRole('ROLE_ADMIN')">Действия</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="question : ${questions}">
+                            <td th:text="${question.id}"></td>
+                            <td th:text="${question.textQuestion}"></td>
+                            <td sec:authorize="hasRole('ROLE_ADMIN')">
+                                <div class="btn-group">
+                                    <a th:href="@{/question/{sect}/{id}/edit(id=${question.id},sect=${section.name})}"
+                                       class="btn btn-sm btn-success">Редактировать</a>
+                                    <a th:href="@{/question/{sect}/{id}/delete(id=${question.id},sect=${section.name})}"
+                                       class="btn btn-sm btn-danger">Удалить</a>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-<div class="container">
-    <h4 th:text="${title}"></h4>
-</div>
-<div th:if="${updateMessage != null}" class="container">
-    <div th:text="${updateMessage}" class="col-md-8 border rounded mb-2 p-2 border-success border-3 fw-bold"></div>
-</div>
-<div th:if="${deleteMessage!= null}" class="container">
-    <div th:text="${deleteMessage}" class="col-md-8 border rounded mb-2 p-2 border-danger border-3 fw-bold"></div>
-</div>
-<div class="container">
-    <div class="col-md-8 border rounded p-2 border-secondary">
-        <div th:if="${dynamicMessage != null}">
-            <div th:utext="${dynamicMessage}" class="text-center"></div>
-        </div>
-        <div th:unless="${dynamicMessage != null}">
-            <table class="table table-striped table-bordered table-hover">
-                <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Текст вопроса</th>
-                    <th sec:authorize="hasRole('ROLE_ADMIN')">Действия</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="question : ${questions}">
-                    <td th:text="${question.id}"></td>
-                    <td th:text="${question.textQuestion}"></td>
-                    <td sec:authorize="hasRole('ROLE_ADMIN')">
-                        <a th:href="@{/question/{sect}/{id}/edit(id=${question.id},sect=${section.name})}"
-                           class="btn btn-primary">Редактировать</a>
-                        <a th:href="@{/question/{sect}/{id}/delete(id=${question.id},sect=${section.name})}"
-                           class="btn btn-danger">Удалить</a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
+    <div th:replace="~{fragments :: footer}"></div>
 </div>
-<div sec:authorize="hasRole('ROLE_ADMIN')" class="container py-3">
-    <a th:unless="${dynamicMessage != null}" th:href="@{/question/{sect}/add(sect=${section.name})}" class="btn btn-success">Добавить вопрос</a>
-</div>
-
-
-<div th:replace="~{fragments :: footer}"></div>
 </body>
 </html>

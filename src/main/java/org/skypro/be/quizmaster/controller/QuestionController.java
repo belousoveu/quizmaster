@@ -17,7 +17,6 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/question")
-@SessionAttributes("targetView")
 public class QuestionController {
 
     @Autowired
@@ -84,6 +83,4 @@ public class QuestionController {
         questionService.saveQuestion(question);
         return "redirect:/question/" + section.getName();
     }
-
-
 }
