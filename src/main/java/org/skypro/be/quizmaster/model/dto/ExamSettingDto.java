@@ -1,7 +1,9 @@
-package org.skypro.be.quizmaster.model;
+package org.skypro.be.quizmaster.model.dto;
 
 
 import jakarta.validation.constraints.*;
+import org.skypro.be.quizmaster.model.QuestionType;
+import org.skypro.be.quizmaster.model.Section;
 
 import java.util.Map;
 

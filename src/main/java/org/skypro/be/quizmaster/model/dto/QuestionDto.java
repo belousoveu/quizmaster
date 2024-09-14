@@ -1,6 +1,7 @@
-package org.skypro.be.quizmaster.model;
+package org.skypro.be.quizmaster.model.dto;
 
-import jakarta.persistence.*;
+import org.skypro.be.quizmaster.model.Answer;
+import org.skypro.be.quizmaster.model.Section;
 
 import java.util.ArrayList;
 import java.util.List;

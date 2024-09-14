@@ -1,6 +1,6 @@
 package org.skypro.be.quizmaster.service;
 
-import org.skypro.be.quizmaster.model.QuestionDto;
+import org.skypro.be.quizmaster.model.dto.QuestionDto;
 import org.skypro.be.quizmaster.model.Section;
 import org.skypro.be.quizmaster.service.questionService.QuestionService;
 

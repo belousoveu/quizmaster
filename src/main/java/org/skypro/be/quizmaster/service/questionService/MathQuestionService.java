@@ -42,7 +42,6 @@ public class MathQuestionService extends DynamicQuestionService {
         return question;
     }
 
-    //TODO Пересмотреть концепцию неправильных ответов. Процент не работает из-за того, что много совпадающих ответов получается
     private Question CreateSingleChoice(Question question) {
         RandomMathTest randomMathTest = new RandomMathTest();
         question.setTextQuestion("Выберете вариант с правильным ответом: \n"

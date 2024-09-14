@@ -1,8 +1,9 @@
 package org.skypro.be.quizmaster.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.skypro.be.quizmaster.converter.QuestionMapper;
 import org.skypro.be.quizmaster.model.Question;
-import org.skypro.be.quizmaster.model.QuestionDto;
+import org.skypro.be.quizmaster.model.dto.QuestionDto;
 import org.skypro.be.quizmaster.model.Section;
 import org.skypro.be.quizmaster.service.questionService.QuestionService;
 import org.skypro.be.quizmaster.service.SectionService;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/question")
+@SessionAttributes("targetView")
 public class QuestionController {
 
     @Autowired
@@ -24,10 +26,12 @@ public class QuestionController {
     private QuestionService questionService;
 
     @GetMapping("/{section}")
-    public String getQuestionsBySection(@PathVariable("section") Section section, Model model) {
+    public String getQuestionsBySection(@PathVariable("section") Section section, Model model, HttpServletRequest request) {
+        request.setAttribute("sectionName", section.getName());
         questionService = sectionService.getService(section);
         model.addAttribute("section", section);
         model.addAttribute("title", "Раздел: "+section.getDescription());
+        request.setAttribute("title", "Раздел: "+section.getDescription());
         model.addAttribute("questions", questionService.getQuestions());
         return "question/questions";
     }

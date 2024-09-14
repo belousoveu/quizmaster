@@ -15,31 +15,36 @@
 </div>
 <div class="container">
     <div class="col-md-8 border rounded p-2 border-secondary">
-        <table class="table table-striped table-bordered table-hover">
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Текст вопроса</th>
-                <th sec:authorize="hasRole('ROLE_ADMIN')">Действия</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="question : ${questions}">
-                <td th:text="${question.id}"></td>
-                <td th:text="${question.textQuestion}"></td>
-                <td sec:authorize="hasRole('ROLE_ADMIN')">
-                    <a th:href="@{/question/{sect}/{id}/edit(id=${question.id},sect=${section.name})}"
-                       class="btn btn-primary">Редактировать</a>
-                    <a th:href="@{/question/{sect}/{id}/delete(id=${question.id},sect=${section.name})}"
-                       class="btn btn-danger">Удалить</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
+        <div th:if="${dynamicMessage != null}">
+            <div th:utext="${dynamicMessage}" class="text-center"></div>
+        </div>
+        <div th:unless="${dynamicMessage != null}">
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Текст вопроса</th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN')">Действия</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="question : ${questions}">
+                    <td th:text="${question.id}"></td>
+                    <td th:text="${question.textQuestion}"></td>
+                    <td sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a th:href="@{/question/{sect}/{id}/edit(id=${question.id},sect=${section.name})}"
+                           class="btn btn-primary">Редактировать</a>
+                        <a th:href="@{/question/{sect}/{id}/delete(id=${question.id},sect=${section.name})}"
+                           class="btn btn-danger">Удалить</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <div sec:authorize="hasRole('ROLE_ADMIN')" class="container py-3">
-    <a th:href="@{/question/{sect}/add(sect=${section.name})}" class="btn btn-success">Добавить вопрос</a>
+    <a th:unless="${dynamicMessage != null}" th:href="@{/question/{sect}/add(sect=${section.name})}" class="btn btn-success">Добавить вопрос</a>
 </div>
 
 

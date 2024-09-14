@@ -1,7 +1,7 @@
 package org.skypro.be.quizmaster.converter;
 
 import org.skypro.be.quizmaster.model.Question;
-import org.skypro.be.quizmaster.model.QuestionDto;
+import org.skypro.be.quizmaster.model.dto.QuestionDto;
 
 public class QuestionMapper {
 

@@ -1,12 +1,12 @@
 package org.skypro.be.quizmaster.service;
 
 import org.skypro.be.quizmaster.model.*;
+import org.skypro.be.quizmaster.model.dto.ExamSettingDto;
 import org.skypro.be.quizmaster.service.questionService.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class ExaminerService {

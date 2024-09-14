@@ -2,7 +2,7 @@ package org.skypro.be.quizmaster.service;
 
 import org.skypro.be.quizmaster.annotation.QuestionServiceSection;
 import org.skypro.be.quizmaster.model.Answer;
-import org.skypro.be.quizmaster.model.QuestionDto;
+import org.skypro.be.quizmaster.model.dto.QuestionDto;
 import org.skypro.be.quizmaster.model.Section;
 import org.skypro.be.quizmaster.service.questionService.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,11 +37,6 @@ public class SectionServiceImp implements SectionService {
         return annotation.value();
     }
 
-//    @Override
-//    public String getDescription(String section) {
-//
-//        return Section.valueOf(section.toUpperCase()).getDescription();
-//    }
 
     @Override
     public List<String> errors(QuestionDto question) {

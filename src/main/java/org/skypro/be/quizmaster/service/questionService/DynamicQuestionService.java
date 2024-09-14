@@ -1,5 +1,6 @@
 package org.skypro.be.quizmaster.service.questionService;
 
+import org.skypro.be.quizmaster.exception.GetListDynamicQuestionsException;
 import org.skypro.be.quizmaster.model.Question;
 import org.skypro.be.quizmaster.model.QuestionType;
 import org.skypro.be.quizmaster.model.Section;
@@ -26,7 +27,7 @@ public abstract class DynamicQuestionService implements QuestionService{
 
     @Override
     public List<Question> getQuestions() {
-        throw new UnsupportedOperationException();
+        throw new GetListDynamicQuestionsException(section.getDescription());
     }
 
     public Question createQuestion() {
