@@ -1,7 +1,7 @@
 package org.skypro.be.quizmaster.model;
 
 public enum QuestionType {
-    OPEN_ANSWER("Открытые вопросы"),
+    OPEN_QUESTION("Открытые вопросы"),
     SINGLE_CHOICE("Вопросы с выбором правильного ответа"),
     MULTIPLE_CHOICE("Вопросы с множественным выбором ответа");
 

@@ -2,6 +2,7 @@ package org.skypro.be.quizmaster.service;
 
 import org.skypro.be.quizmaster.model.*;
 import org.skypro.be.quizmaster.model.dto.ExamSettingDto;
+import org.skypro.be.quizmaster.repository.QuestionRepository;
 import org.skypro.be.quizmaster.service.questionService.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,9 @@ public class ExaminerService {
 
     @Autowired
     SectionService sectionService;
+
+    @Autowired
+    QuestionRepository questionRepository;
 
     public ExamSetting getDefaultSettings() {
         return new ExamSetting();
@@ -29,31 +33,46 @@ public class ExaminerService {
         System.out.println("arithmeticQuestion.getId() = " + arithmeticQuestion.getId());
         System.out.println("arithmeticQuestion.getSection() = " + arithmeticQuestion.getSection());
 
+        List<Section> selectedSections = examSettings.getSelectedSections().entrySet().stream()
+                .filter(Map.Entry::getValue)
+                .map(Map.Entry::getKey)
+                .toList();
+        List<QuestionType> selectedTypes = examSettings.getSelectedTypes().entrySet().stream()
+                .filter(Map.Entry::getValue)
+                .map(Map.Entry::getKey)
+                .toList();
+
+        if (!checkingEnoughQuestions(examSettings.getNumberOfQuestions(), selectedSections, selectedTypes)) {
+            throw new IllegalArgumentException("Not enough questions for the exam"); //TODO: добавить отдельное исключение и обработать его.
+            // Не хватает вопросов в базе
+
+        }
+
         while (questions.size() < examSettings.getNumberOfQuestions()) {
-            Section randomSection = getRandomSection(examSettings.getSelectedSections());
+            Section randomSection = RandomUtils.getRandomElement(selectedSections);
+            QuestionType randomType = RandomUtils.getRandomElement(selectedTypes);
             QuestionService questionService=sectionService.getService(randomSection);
-            List<QuestionType> types = examSettings.getSelectedTypes().entrySet().stream()
-                    .filter(Map.Entry::getValue)
-                    .map(Map.Entry::getKey)
-                    .toList();
-            questions.add(questionService.getRandomQuestion(types));
+            try {
+                questions.add(questionService.getRandomQuestion(randomType));
+            } catch (IllegalArgumentException ignored) { //TODO: создать отдельный класс ошибок для случая если подходящего вопроса нет в базе
+            }
         }
 
         for (Question question : questions) {
             System.out.println("question.getTextQuestion() = " + question.getTextQuestion());
             question.getAnswers().forEach(answer -> System.out.println("answer.getTextAnswer() = " + answer.getTextAnswer()+" "+answer.getIsCorrect()));
-
         }
 
         return questions.stream().toList();
     }
 
-    private Section getRandomSection(Map<Section, Boolean> selectedSections) {
-        if (selectedSections.size() == 1) {
-            return selectedSections.keySet().iterator().next();
+    private boolean checkingEnoughQuestions(int numberOfQuestions,
+                                            List<Section> selectedSections,
+                                            List<QuestionType> selectedTypes) {
+        if (selectedSections.stream().noneMatch(Section::getAutomaticQuestionGeneration)) {
+            return numberOfQuestions <= questionRepository
+                    .countBySectionAndQuestionType(selectedSections, selectedTypes);
         }
-        List<Section> sections = new ArrayList<>(selectedSections.keySet());
-        Collections.shuffle(sections);
-        return sections.get(0);
+        return true;
     }
 }

@@ -19,12 +19,10 @@ public class MathQuestionService extends DynamicQuestionService {
     }
 
     @Override
-    public Question getRandomQuestion(List<QuestionType> types) {
-        Random random = new Random();
-        QuestionType randomType = types.get(random.nextInt(types.size()));
+    public Question getRandomQuestion(QuestionType randomType) {
         Question question = new Question(Section.MATH);
         return switch (randomType) {
-            case OPEN_ANSWER -> CreateOpenAnswer(question);
+            case OPEN_QUESTION -> CreateOpenAnswer(question);
             case MULTIPLE_CHOICE -> CreateMultipleChoice(question);
             case SINGLE_CHOICE -> CreateSingleChoice(question);
         };

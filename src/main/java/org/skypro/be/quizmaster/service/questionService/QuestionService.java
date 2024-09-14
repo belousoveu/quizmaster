@@ -18,5 +18,5 @@ public interface QuestionService {
 
     void deleteQuestion(Long id);
 
-    Question getRandomQuestion(List<QuestionType> questionTypes);
+    Question getRandomQuestion(QuestionType questionTypes);
 }

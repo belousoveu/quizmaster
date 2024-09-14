@@ -13,7 +13,6 @@ import java.util.Map;
 
 @Service
 public abstract class DynamicQuestionService implements QuestionService{
-    private final boolean AutomaticQuestionGenerated = true;
     protected Section section;
 
     @Autowired
@@ -49,6 +48,6 @@ public abstract class DynamicQuestionService implements QuestionService{
         throw new UnsupportedOperationException();
     }
 
-    public abstract Question getRandomQuestion(List<QuestionType> types);
+    public abstract Question getRandomQuestion(QuestionType questionType);
 
 }

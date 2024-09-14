@@ -4,15 +4,14 @@ import org.skypro.be.quizmaster.model.Question;
 import org.skypro.be.quizmaster.model.QuestionType;
 import org.skypro.be.quizmaster.model.Section;
 import org.skypro.be.quizmaster.repository.QuestionRepository;
+import org.skypro.be.quizmaster.service.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 @Service
 public abstract class ManualQuestionService implements QuestionService {
-    private final boolean AutomaticQuestionGenerated = false;
     protected Section section;
 
     @Autowired
@@ -44,7 +43,7 @@ public abstract class ManualQuestionService implements QuestionService {
 
     @Override
     public Question getQuestion(Long id) {
-        return questionRepository.findById(id).orElseThrow(()->new IllegalArgumentException("Question not found"));
+        return questionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Question not found"));
     }
 
     @Override
@@ -52,8 +51,10 @@ public abstract class ManualQuestionService implements QuestionService {
         questionRepository.deleteById(id);
     }
 
-    public Question getRandomQuestion(List<QuestionType> types) {
-        return new Question(section);
+    public Question getRandomQuestion(QuestionType questionType) {
+        List<Long> ids = questionRepository.findIdsBySectionAndType(section, questionType);
+        Long randomId= RandomUtils.getRandomElement(ids);
+        return questionRepository.findById(randomId).orElseThrow(() -> new IllegalArgumentException("Question not found"));
     }
 }
 

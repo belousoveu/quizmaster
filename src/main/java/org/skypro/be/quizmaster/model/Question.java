@@ -21,7 +21,12 @@ public class Question {
     private List<Answer> answers = new ArrayList<>();
 
     @Column
+    @Enumerated(EnumType.STRING)
     private Section section;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private QuestionType questionType;
 
     public Question() {
     }
@@ -54,6 +59,13 @@ public class Question {
 
     public void setAnswers(List<Answer> answers) {
         this.answers = answers;
+        if (answers.size() == 1) {
+            setQuestionType(QuestionType.OPEN_QUESTION);
+        } else if (answers.stream().filter(Answer::isCorrect).count() == 1) {
+            setQuestionType(QuestionType.SINGLE_CHOICE);
+        } else if (answers.stream().filter(Answer::isCorrect).count() > 1) {
+            setQuestionType(QuestionType.MULTIPLE_CHOICE);
+        }
     }
 
     public Section getSection() {
@@ -64,9 +76,17 @@ public class Question {
         this.section = section;
     }
 
+    public QuestionType getQuestionType() {
+        return questionType;
+    }
+
+    public void setQuestionType(QuestionType questionType) {
+        this.questionType = questionType;
+    }
+
+    @Override
     public String toString() {
         return section.getName() + " " + textQuestion + "\n" + answers.toString();
-
     }
 
     @Override

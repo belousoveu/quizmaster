@@ -5,16 +5,18 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum Section {
 
-    JAVA("java", "Вопросы по Java Core") ,
-    SPRING("spring", "Вопросы по Spring Framework") ,
-    MATH("math", "Вопросы по арифметике") ;
+    JAVA("java", "Вопросы по Java Core",false) ,
+    SPRING("spring", "Вопросы по Spring Framework",false),
+    MATH("math", "Вопросы по арифметике", true) ;
 
     private final String name;
     private final String description;
+    private final boolean AutomaticQuestionGeneration;
 
-    Section(String name, String description) {
+    Section(String name, String description, boolean automaticQuestionGeneration) {
         this.name = name;
         this.description = description;
+        this.AutomaticQuestionGeneration = automaticQuestionGeneration;
     }
 
     @JsonValue
@@ -26,6 +28,10 @@ public enum Section {
         return description;
     }
 
+    public boolean getAutomaticQuestionGeneration() {
+        return AutomaticQuestionGeneration;
+    }
+
     @JsonCreator
     public static Section getByName(String name) {
         for (Section section : Section.values()) {
@@ -33,6 +39,6 @@ public enum Section {
                 return section;
             }
         }
-        throw new IllegalArgumentException("Неизвестное имя раздела: " + name);
+        throw new IllegalArgumentException("Неизвестное имя раздела: " + name); //TODO сделать отдельное исключение
     }
 }
