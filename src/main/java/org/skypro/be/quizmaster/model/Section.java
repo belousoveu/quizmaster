@@ -39,6 +39,6 @@ public enum Section {
                 return section;
             }
         }
-        throw new IllegalArgumentException("Неизвестное имя раздела: " + name); //TODO сделать отдельное исключение
+        throw new IllegalArgumentException("Неизвестное имя раздела: " + name+ "\nДанная ошибка не должна появляться"); //TODO сделать отдельное исключение
     }
 }

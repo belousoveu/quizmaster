@@ -2,6 +2,7 @@ package org.skypro.be.quizmaster.service;
 
 import org.skypro.be.quizmaster.annotation.QuestionServiceSection;
 import org.skypro.be.quizmaster.model.Answer;
+import org.skypro.be.quizmaster.model.QuestionType;
 import org.skypro.be.quizmaster.model.dto.QuestionDto;
 import org.skypro.be.quizmaster.model.Section;
 import org.skypro.be.quizmaster.service.questionService.QuestionService;
@@ -29,10 +30,11 @@ public class SectionServiceImp implements SectionService {
         return serviceMap.get(section);
     }
 
+
     private Section getSection(QuestionService service) {
         QuestionServiceSection annotation = service.getClass().getAnnotation(QuestionServiceSection.class);
         if (annotation == null) {
-            throw new IllegalArgumentException("Service is not annotated with @QuestionService");
+            throw new IllegalArgumentException("Service is not annotated with @QuestionService"); //TODO: Сделать отдельный класс. Ошибка не должна появляться
         }
         return annotation.value();
     }

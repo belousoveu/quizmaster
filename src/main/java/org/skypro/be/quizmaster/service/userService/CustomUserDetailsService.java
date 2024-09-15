@@ -1,4 +1,4 @@
-package org.skypro.be.quizmaster.service;
+package org.skypro.be.quizmaster.service.userService;
 
 import org.skypro.be.quizmaster.model.User;
 import org.skypro.be.quizmaster.repository.UserRepository;

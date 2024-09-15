@@ -3,6 +3,7 @@ package org.skypro.be.quizmaster.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import org.skypro.be.quizmaster.converter.QuestionMapper;
 import org.skypro.be.quizmaster.model.Question;
+import org.skypro.be.quizmaster.model.QuestionType;
 import org.skypro.be.quizmaster.model.dto.QuestionDto;
 import org.skypro.be.quizmaster.model.Section;
 import org.skypro.be.quizmaster.service.questionService.QuestionService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/question")
@@ -26,11 +28,10 @@ public class QuestionController {
 
     @GetMapping("/{section}")
     public String getQuestionsBySection(@PathVariable("section") Section section, Model model, HttpServletRequest request) {
-        request.setAttribute("sectionName", section.getName());
         questionService = sectionService.getService(section);
         model.addAttribute("section", section);
-        model.addAttribute("title", "Раздел: "+section.getDescription());
         request.setAttribute("title", "Раздел: "+section.getDescription());
+        request.setAttribute("types", questionService.getQuestionTypesStatistics());
         model.addAttribute("questions", questionService.getQuestions());
         return "question/questions";
     }

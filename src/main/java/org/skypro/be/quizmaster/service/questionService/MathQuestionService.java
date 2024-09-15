@@ -5,6 +5,7 @@ import org.skypro.be.quizmaster.model.Answer;
 import org.skypro.be.quizmaster.model.Question;
 import org.skypro.be.quizmaster.model.QuestionType;
 import org.skypro.be.quizmaster.model.Section;
+import org.skypro.be.quizmaster.service.utils.RandomUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -50,10 +51,10 @@ public class MathQuestionService extends DynamicQuestionService {
         List<Answer> answers = new ArrayList<>();
         answers.add(correctAnswer);
         // Добавляем от 2 до 4 неправильных ответов
-        int numberOfIncorrectAnswers = getRandomIntWithinRange(3, 1);
+        int numberOfIncorrectAnswers = RandomUtils.getRandomIntWithinRange(3, 1);
         int range = 5; // разброс вариантов неправильных ответов относительно правильного
         while (answers.size() <= numberOfIncorrectAnswers) {
-            int incorrectResult = getRandomIntWithinRange(randomMathTest.result, range);
+            int incorrectResult = RandomUtils.getRandomIntWithinRange(randomMathTest.result, range);
             if (incorrectResult != randomMathTest.result) {
                 Answer incorrectAnswer = new Answer();
                 incorrectAnswer.setTextAnswer(String.valueOf(incorrectResult));
@@ -79,7 +80,7 @@ public class MathQuestionService extends DynamicQuestionService {
         Set<Integer> answerSet = new HashSet<>();
         answerSet.add(randomMathTest.result);
         while (answerSet.size() <= numberOfOptions) {
-            answerSet.add(getRandomIntWithinRange(randomMathTest.result, range));
+            answerSet.add(RandomUtils.getRandomIntWithinRange(randomMathTest.result, range));
         }
         String valuesString = answerSet.stream()
                 .map(String::valueOf)
@@ -88,12 +89,12 @@ public class MathQuestionService extends DynamicQuestionService {
         correctAnswer.setIsCorrect(true);
         answers.add(correctAnswer);
 
-        int numberOfIncorrectAnswers = getRandomIntWithinRange(3, 1);
+        int numberOfIncorrectAnswers = RandomUtils.getRandomIntWithinRange(3, 1);
 
         while (answers.size() <= numberOfIncorrectAnswers) {
             Set<Integer> incorrectAnswerSet = new HashSet<>();
             while (incorrectAnswerSet.size() <= numberOfOptions) {
-                incorrectAnswerSet.add(getRandomIntWithinRange(randomMathTest.result, range));
+                incorrectAnswerSet.add(RandomUtils.getRandomIntWithinRange(randomMathTest.result, range));
             }
             Answer incorrectAnswer = new Answer();
             incorrectAnswer.setTextAnswer(incorrectAnswerSet.stream()
@@ -109,21 +110,6 @@ public class MathQuestionService extends DynamicQuestionService {
 
         return question;
     }
-
-    private int getRandomIntWithinRange(int target, int deviation) {
-        Random random = new Random();
-        return random.nextInt(((target + deviation) - (target - deviation) + 1)) + (target - deviation);
-    }
-
-    private Set<Integer> getRandomIntSetWithinRange(int target, int deviation, int size) {
-        Set<Integer> resultSet = new HashSet<>();
-        resultSet.add(target);
-        while (resultSet.size() <= size) {
-            resultSet.add(getRandomIntWithinRange(target, deviation));
-        }
-        return resultSet;
-    }
-
 
     private static class RandomMathTest {
         int value1;

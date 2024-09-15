@@ -10,15 +10,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
-public abstract class DynamicQuestionService implements QuestionService{
+public abstract class DynamicQuestionService implements QuestionService {
     protected Section section;
 
     @Autowired
     private QuestionRepository questionRepository;
 
-    public DynamicQuestionService() {}
+    public DynamicQuestionService() {
+    }
 
     public DynamicQuestionService(Section section) {
         this.section = section;
@@ -46,6 +50,12 @@ public abstract class DynamicQuestionService implements QuestionService{
     @Override
     public void deleteQuestion(Long id) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Map<String, String> getQuestionTypesStatistics() {
+        return Stream.of(QuestionType.values())
+                .collect(Collectors.toMap(QuestionType::getName, e -> "&infin;"));
     }
 
     public abstract Question getRandomQuestion(QuestionType questionType);

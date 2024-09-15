@@ -65,6 +65,8 @@ public class Question {
             setQuestionType(QuestionType.SINGLE_CHOICE);
         } else if (answers.stream().filter(Answer::isCorrect).count() > 1) {
             setQuestionType(QuestionType.MULTIPLE_CHOICE);
+        } else {
+            throw new IllegalStateException("Question type is unknown. Данная ошибка не должна появляться"); // TODO Сделать отдельное исключение
         }
     }
 

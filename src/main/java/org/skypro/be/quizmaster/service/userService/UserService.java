@@ -1,4 +1,4 @@
-package org.skypro.be.quizmaster.service;
+package org.skypro.be.quizmaster.service.userService;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.ServletException;

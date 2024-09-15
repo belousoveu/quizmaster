@@ -25,5 +25,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
     List<Long> findIdsBySectionAndType(@Param("section") Section section,
                                        @Param("questionType") QuestionType questionType);
 
+    @Query("SELECT COUNT(q) FROM Question q WHERE q.section = :section AND q.questionType = :questionType")
+    long countBySectionAndType(Section section, QuestionType questionType);
 }
 

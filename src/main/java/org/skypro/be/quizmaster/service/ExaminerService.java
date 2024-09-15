@@ -4,6 +4,7 @@ import org.skypro.be.quizmaster.model.*;
 import org.skypro.be.quizmaster.model.dto.ExamSettingDto;
 import org.skypro.be.quizmaster.repository.QuestionRepository;
 import org.skypro.be.quizmaster.service.questionService.QuestionService;
+import org.skypro.be.quizmaster.service.utils.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

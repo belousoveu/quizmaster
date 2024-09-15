@@ -3,7 +3,7 @@ package org.skypro.be.quizmaster.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.skypro.be.quizmaster.model.User;
-import org.skypro.be.quizmaster.service.UserService;
+import org.skypro.be.quizmaster.service.userService.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

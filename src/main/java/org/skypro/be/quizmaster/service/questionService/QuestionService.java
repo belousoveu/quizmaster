@@ -19,4 +19,6 @@ public interface QuestionService {
     void deleteQuestion(Long id);
 
     Question getRandomQuestion(QuestionType questionTypes);
+
+    Map<String, String> getQuestionTypesStatistics();
 }
