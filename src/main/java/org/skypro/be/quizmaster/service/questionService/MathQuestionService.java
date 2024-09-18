@@ -45,10 +45,12 @@ public class MathQuestionService extends DynamicQuestionService {
         RandomMathTest randomMathTest = new RandomMathTest();
         question.setTextQuestion("Выберете вариант с правильным ответом: \n"
                 + randomMathTest.description + "\n" + randomMathTest + " ?");
+
         Answer correctAnswer = new Answer();
         correctAnswer.setTextAnswer(String.valueOf(randomMathTest.result));
         correctAnswer.setIsCorrect(true);
-        List<Answer> answers = new ArrayList<>();
+
+        Set<Answer> answers = new HashSet<>();
         answers.add(correctAnswer);
         // Добавляем от 2 до 4 неправильных ответов
         int numberOfIncorrectAnswers = RandomUtils.getRandomIntWithinRange(3, 1);
@@ -62,8 +64,10 @@ public class MathQuestionService extends DynamicQuestionService {
                 answers.add(incorrectAnswer);
             }
         }
-        Collections.shuffle(answers);
-        question.setAnswers(answers);
+        List<Answer> answersList = new ArrayList<>(answers);
+        Collections.shuffle(answersList);
+
+        question.setAnswers(answersList);
         return question;
     }
 
@@ -74,7 +78,7 @@ public class MathQuestionService extends DynamicQuestionService {
         int numberOfOptions = 3; // количество значений в каждом варианте ответа
         int range = 5; // разброс вариантов неправильных ответов относительно правильного
 
-        List<Answer> answers = new ArrayList<>();
+        Set<Answer> answers = new HashSet<>();
 
         Answer correctAnswer = new Answer();
         Set<Integer> answerSet = new HashSet<>();
@@ -89,24 +93,25 @@ public class MathQuestionService extends DynamicQuestionService {
         correctAnswer.setIsCorrect(true);
         answers.add(correctAnswer);
 
-        int numberOfIncorrectAnswers = RandomUtils.getRandomIntWithinRange(3, 1);
+        int numberOfAdditionalAnswers = RandomUtils.getRandomIntWithinRange(3, 1);
 
-        while (answers.size() <= numberOfIncorrectAnswers) {
-            Set<Integer> incorrectAnswerSet = new HashSet<>();
-            while (incorrectAnswerSet.size() <= numberOfOptions) {
-                incorrectAnswerSet.add(RandomUtils.getRandomIntWithinRange(randomMathTest.result, range));
+        while (answers.size() <= numberOfAdditionalAnswers) {
+            Set<Integer> additionalAnswerSet = new HashSet<>();
+            while (additionalAnswerSet.size() <= numberOfOptions) {
+                additionalAnswerSet.add(RandomUtils.getRandomIntWithinRange(randomMathTest.result, range));
             }
-            Answer incorrectAnswer = new Answer();
-            incorrectAnswer.setTextAnswer(incorrectAnswerSet.stream()
+            Answer additionalAnswer = new Answer();
+            additionalAnswer.setTextAnswer(additionalAnswerSet.stream()
                     .map(String::valueOf)
                     .collect(Collectors.joining(", "))
             );
-            incorrectAnswer.setIsCorrect(incorrectAnswerSet.contains(randomMathTest.result));
-            answers.add(incorrectAnswer);
+            additionalAnswer.setIsCorrect(additionalAnswerSet.contains(randomMathTest.result));
+            answers.add(additionalAnswer);
         }
 
-        Collections.shuffle(answers);
-        question.setAnswers(answers);
+        List<Answer> answersList = new ArrayList<>(answers);
+        Collections.shuffle(answersList);
+        question.setAnswers(answersList);
 
         return question;
     }
