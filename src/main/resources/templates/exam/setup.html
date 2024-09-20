@@ -10,7 +10,7 @@
             <h4 th:text="${title}"></h4>
         </div>
         <div class="container">
-            <form th:action="@{/exam/setup}" method="post" th:object="${examSettings}" class="form container px-2">
+            <form th:action="@{/exam/start}" method="post" th:object="${examSettings}" class="form container px-2">
                     <div class="row gx-5">
                         <div class="col card text-bg-info mx-2">
                             <h5 class="card-title mb-2 p-2">Укажите разделы для тестирования:</h5>

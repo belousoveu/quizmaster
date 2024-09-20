@@ -112,6 +112,7 @@ public class MathQuestionService extends DynamicQuestionService {
         List<Answer> answersList = new ArrayList<>(answers);
         Collections.shuffle(answersList);
         question.setAnswers(answersList);
+        question.setQuestionType(QuestionType.MULTIPLE_CHOICE);
 
         return question;
     }

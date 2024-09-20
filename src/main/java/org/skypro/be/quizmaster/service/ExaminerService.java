@@ -24,16 +24,8 @@ public class ExaminerService {
     }
 
     public List<Question> getQuestions(ExamSettingDto examSettings) {
-        List<Question> result = new ArrayList<>();
-        System.out.println("examSettings.getNumberOfQuestions() = " + examSettings.getNumberOfQuestions());
-        examSettings.getSelectedSections().forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
-        examSettings.getSelectedTypes().forEach((key, value) -> System.out.println("Key: " + key + ", Value: " + value));
 
         Set<Question> questions = new HashSet<>();
-        Question arithmeticQuestion = new Question(Section.MATH);
-        System.out.println("arithmeticQuestion.getId() = " + arithmeticQuestion.getId());
-        System.out.println("arithmeticQuestion.getSection() = " + arithmeticQuestion.getSection());
-
         List<Section> selectedSections = examSettings.getSelectedSections().entrySet().stream()
                 .filter(Map.Entry::getValue)
                 .map(Map.Entry::getKey)
@@ -46,25 +38,32 @@ public class ExaminerService {
         if (!checkingEnoughQuestions(examSettings.getNumberOfQuestions(), selectedSections, selectedTypes)) {
             throw new IllegalArgumentException("Not enough questions for the exam"); //TODO: добавить отдельное исключение и обработать его.
             // Не хватает вопросов в базе
-
         }
 
         while (questions.size() < examSettings.getNumberOfQuestions()) {
             Section randomSection = RandomUtils.getRandomElement(selectedSections);
             QuestionType randomType = RandomUtils.getRandomElement(selectedTypes);
-            QuestionService questionService=sectionService.getService(randomSection);
+            QuestionService questionService = sectionService.getService(randomSection);
             try {
                 questions.add(questionService.getRandomQuestion(randomType));
-            } catch (IllegalArgumentException ignored) { //TODO: создать отдельный класс ошибок для случая если подходящего вопроса нет в базе
+            } catch (
+                    IllegalArgumentException ignored) { //TODO: создать отдельный класс ошибок для случая если подходящего вопроса нет в базе
             }
         }
 
-        for (Question question : questions) {
-            System.out.println("question.getTextQuestion() = " + question.getTextQuestion());
-            question.getAnswers().forEach(answer -> System.out.println("answer.getTextAnswer() = " + answer.getTextAnswer()+" "+answer.getIsCorrect()));
-        }
-
         return questions.stream().toList();
+    }
+
+    public List<ExamQuestion> getResult(List<Question> questions, Map<String, List<String>> answers) {
+        List<ExamQuestion> examQuestions = new ArrayList<>();
+
+        for (int i = 0; i < questions.size(); i++) {
+            ExamQuestion examQuestion = new ExamQuestion(questions.get(i));
+            examQuestion.updateUserAnswers(answers.get("answer_" + i));
+            examQuestion.validateAnswer();
+            examQuestions.add(examQuestion);
+        }
+        return examQuestions;
     }
 
     private boolean checkingEnoughQuestions(int numberOfQuestions,

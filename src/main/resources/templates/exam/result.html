@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="~{fragments :: head}"></head>
+<body style="height: 100%">
+<div style="display: flex; flex-direction: column; height: 100vh;">
+    <div th:replace="~{fragments :: header}"></div>
+    <div style="flex: 1; overflow-y: auto; padding: 1rem;">
+
+        <div class="container">
+            <h4 th:text="${title}"></h4>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group" th:each="question, iter : ${examResults}">
+                        <h5 th:text="'Вопрос №' + ${iter.index + 1}" class="text-left mt-2"></h5>
+                        <div class="card text-bg-info mx-2">
+                            <div class="card-body">
+                                <p th:text="${question.textQuestion}"></p>
+                            </div>
+
+                            <div th:if="${question.questionType==T(org.skypro.be.quizmaster.model.QuestionType).OPEN_QUESTION}"
+                                 class="card m-3">
+                                <div class="card-body" th:classappend="${!question.correct} ? 'text-bg-danger'">
+                                    <label th:for="'answer'+${iter.index}">Ваш ответ:</label>
+                                    <input type="text" th:id="'answer'+${iter.index}" class="form-control"
+                                           th:value="${question.userAnswers[0].textAnswer}" disabled>
+                                </div>
+                                <div th:if="${question.correct}" class="card-body my-1 text-bg-success">
+                                    Отлично!
+                                </div>
+                                <div th:unless="${question.correct}" class="card-body">
+                                    <label th:for="'answer'+${iter.index}">Ошибка! Правильный ответ:</label>
+                                    <input type="text" th:id="'answer'+${iter.index}" class="form-control"
+                                           th:value="${question.correctAnswers[0].textAnswer}" disabled>
+                                </div>
+                            </div>
+
+                            <div th:if="${question.questionType==T(org.skypro.be.quizmaster.model.QuestionType).SINGLE_CHOICE}"
+                                 class="card m-3">
+                                <div class="card-body" th:classappend="${!question.correct} ? 'text-bg-danger'">
+                                    <p>Ваш ответ:</p>
+                                    <div class="form-check" th:each="answer, iterAnswers : ${question.userAnswers}">
+                                        <input class="form-check-input" type="radio"
+                                               th:value="${answer.textAnswer}"
+                                               th:id="'radio'+${iter.index}+'_'+${iterAnswers.index}"
+                                               th:checked="${answer.isCorrect}" disabled>
+                                        <label class="form-check-label"
+                                               th:for="'radio'+${iter.index}+'_'+${iterAnswers.index}"
+                                               th:text="${answer.textAnswer}"></label>
+                                    </div>
+                                </div>
+                                <div th:if="${question.correct}" class="card-body text-bg-success">
+                                    Отлично!
+                                </div>
+                                <div th:unless="${question.correct}" class="card-body">
+                                    <p>Ошибка! Правильный ответ:</p>
+                                    <div class="form-check" th:each="answer, iterAnswers : ${question.correctAnswers}">
+                                        <input class="form-check-input" type="radio"
+                                               th:value="${answer.textAnswer}"
+                                               th:id="'radio'+${iter.index}+'_'+${iterAnswers.index}"
+                                               th:checked="${answer.isCorrect}" disabled>
+                                        <label class="form-check-label"
+                                               th:for="'radio'+${iter.index}+'_'+${iterAnswers.index}"
+                                               th:text="${answer.textAnswer}"></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div th:if="${question.questionType==T(org.skypro.be.quizmaster.model.QuestionType).MULTIPLE_CHOICE}"
+                                 class="card m-3">
+                                <div class="card-body" th:classappend="${!question.correct} ? 'text-bg-danger'">
+                                    <p>Ваш ответ:</p>
+                                    <div class="form-check" th:each="answer, iterAnswers : ${question.userAnswers}">
+                                        <input class="form-check-input" type="checkbox"
+                                               th:value="${answer.textAnswer}"
+                                               th:id="'check'+${iter.index}+'_'+${iterAnswers.index}"
+                                               th:checked="${answer.isCorrect}" disabled>
+                                        <label class="form-check-label"
+                                               th:for="'check'+${iter.index}+'_'+${iterAnswers.index}"
+                                               th:text="${answer.textAnswer}"></label>
+                                    </div>
+                                </div>
+                                <div th:if="${question.correct}" class="card-body text-bg-success">
+                                    Отлично!
+                                </div>
+                                <div th:unless="${question.correct}" class="card-body">
+                                    <p>Ошибка! Правильный ответ:</p>
+                                    <div class="form-check" th:each="answer, iterAnswers : ${question.correctAnswers}">
+                                        <input class="form-check-input" type="checkbox"
+                                               th:value="${answer.textAnswer}"
+                                               th:id="'check'+${iter.index}+'_'+${iterAnswers.index}"
+                                               th:checked="${answer.isCorrect}" disabled>
+                                        <label class="form-check-label"
+                                               th:for="'check'+${iter.index}+'_'+${iterAnswers.index}"
+                                               th:text="${answer.textAnswer}"></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 d-flex flex-column justify-content-start text-center pt-5" style="height: 100vh;">
+                    <h2>Результаты:</h2>
+                    <h2 th:text="${correctAnswersCount +' из '+totalQuestions}"></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="~{fragments :: footer}"></div>
+</div>
+</body>
+</html>
