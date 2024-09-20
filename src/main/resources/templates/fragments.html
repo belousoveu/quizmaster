@@ -37,10 +37,10 @@
                             </ul>
                         </li>
                         <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}">
-                            <a class="nav-link" href="/">Результаты</a>
+                            <a class="nav-link" th:href="@{/exam/{Id}(Id=${userId})}">Результаты</a>
                         </li>
                         <li class="nav-item" th:unless="${#authorization.expression('isAuthenticated()')}">
-                            <a class="nav-link disabled" href="/">Результаты</a>
+                            <a class="nav-link disabled" >Результаты</a>
                         </li>
                         <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}">
                             <a class="nav-link" href="#"

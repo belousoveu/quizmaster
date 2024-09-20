@@ -3,11 +3,13 @@ package org.skypro.be.quizmaster.service;
 import org.skypro.be.quizmaster.model.*;
 import org.skypro.be.quizmaster.model.dto.ExamSettingDto;
 import org.skypro.be.quizmaster.repository.QuestionRepository;
+import org.skypro.be.quizmaster.repository.ResultsRepository;
 import org.skypro.be.quizmaster.service.questionService.QuestionService;
 import org.skypro.be.quizmaster.service.utils.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -18,6 +20,9 @@ public class ExaminerService {
 
     @Autowired
     QuestionRepository questionRepository;
+
+    @Autowired
+    ResultsRepository resultsRepository;
 
     public ExamSetting getDefaultSettings() {
         return new ExamSetting();
@@ -74,5 +79,26 @@ public class ExaminerService {
                     .countBySectionAndQuestionType(selectedSections, selectedTypes);
         }
         return true;
+    }
+
+    public List<Result> getUserResults(Long userId) {
+        return resultsRepository.findAllByUserId(userId);
+    }
+
+    public String getExamDescription(ExamSettingDto examSettings) {
+        if (examSettings.getSelectedSections().entrySet().stream().filter(Map.Entry::getValue).toList().size() > 1) {
+            return "Комплексный тест";
+        } else {
+            return examSettings.getSelectedSections().keySet().stream().findFirst().get().getDescription();
+        }
+    }
+
+    public void saveResult(Long userId, List<ExamQuestion> examResults, String description) {
+        Result result = new Result(userId,
+                description,
+                LocalDateTime.now(),
+                (long) examResults.size(),
+                examResults.stream().filter(ExamQuestion::getCorrect).count());
+        resultsRepository.save(result);
     }
 }

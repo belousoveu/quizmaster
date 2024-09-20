@@ -64,4 +64,13 @@ public class UserService {
             logger.error(e.getMessage(), e);
         }
     }
+
+
+    public String getUserName(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found")).getUsername();
+    }
+
+    public User getUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }
 }

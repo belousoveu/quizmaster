@@ -2,8 +2,11 @@ package org.skypro.be.quizmaster.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.skypro.be.quizmaster.exception.GetListDynamicQuestionsException;
+import org.skypro.be.quizmaster.model.User;
 import org.skypro.be.quizmaster.service.SectionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,5 +28,10 @@ public class GlobalControllerAdvice {
     @ModelAttribute
     public void getMenuItems(Model model) {
         model.addAttribute("menuItems", sectionService.getSections());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getPrincipal() !=null && authentication.getPrincipal()!="anonymousUser") {
+            Long userId = ((User) authentication.getPrincipal()).getId();
+            model.addAttribute("userId", userId);
+        }
     }
 }
