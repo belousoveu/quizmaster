@@ -1,28 +1,30 @@
-package org.skypro.be.quizmaster.service.userService;
+package org.skypro.be.quizmaster.service.user;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.skypro.be.quizmaster.model.User;
 import org.skypro.be.quizmaster.repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
 @Service
-public class UserService {
+@Slf4j
+public class UserServiceImp implements UserService {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UserServiceImp(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PostConstruct
     public void init() {
@@ -32,45 +34,49 @@ public class UserService {
             admin.setPassword(passwordEncoder.encode("root"));
             admin.setRoles(Collections.singleton("ROLE_ADMIN"));
             userRepository.save(admin);
-            logger.info("Admin user created: {}", admin);
+            log.info("Admin user created: {}", admin);
         } else {
-            logger.info("Admin user already exists");
+            log.info("Admin user already exists");
         }
     }
 
+    @Override
     public void registerUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Collections.singleton("ROLE_USER"));
-        logger.info("User created: {}", user);
+        log.info("User created: {}", user);
         userRepository.save(user);
     }
 
+    @Override
     public void changeUserRole(Long id, String role) {
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
         user.setRoles(Collections.singleton("ROLE_" + role));
-        logger.info("User role changed: {}", user);
+        log.info("User role changed: {}", user);
         userRepository.save(user);
     }
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username);
-    }
-
+    @Override
     public void authenticate(String username, String password, HttpServletRequest request) {
         try {
             request.login(username, password);
-            logger.info("User authenticated: {}", username);
+            log.info("User authenticated: {}", username);
         } catch (ServletException e) {
-            logger.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
     }
 
-
-    public String getUserName(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found")).getUsername();
-    }
-
+    @Override
     public User getUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        return user;
     }
 }

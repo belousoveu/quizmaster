@@ -1,43 +1,32 @@
 package org.skypro.be.quizmaster.model;
 
 import jakarta.persistence.Embeddable;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 
+@Setter
+@Getter
 @Embeddable
 public class Answer {
     private String textAnswer;
     private Boolean isCorrect = false;
 
-    public Answer() {}
+    public Answer() {
+    }
 
     public Answer(String textAnswer, Boolean isCorrect) {
         this.textAnswer = textAnswer;
         this.isCorrect = isCorrect;
     }
 
-    public String getTextAnswer() {
-        return textAnswer;
-    }
-
-    public void setTextAnswer(String textAnswer) {
-        this.textAnswer = textAnswer;
-    }
-
-    public Boolean getIsCorrect() {
-        return isCorrect;
-    }
-
     public Boolean isCorrect() {
         return isCorrect;
     }
 
-    public void setIsCorrect(Boolean isCorrect) {
-        this.isCorrect = isCorrect;
-    }
-
     public String toString() {
-        return isCorrect + ", " + textAnswer+"\n";
+        return isCorrect + ", " + textAnswer + "\n";
     }
 
     @Override

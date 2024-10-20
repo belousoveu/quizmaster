@@ -12,6 +12,8 @@
         <div class="container">
             <form th:action="@{/exam/start}" method="post" th:object="${examSettings}" class="form container px-2">
                     <div class="row gx-5">
+                        <span class="text-danger" th:if="${ error != null}"
+                              th:text="${error}"></span>
                         <div class="col card text-bg-info mx-2">
                             <h5 class="card-title mb-2 p-2">Укажите разделы для тестирования:</h5>
                             <div class="card-body">
@@ -39,6 +41,8 @@
                                 <div class="col">
                                     <input type="number" class="form-control" id="numberOfQuestions"
                                            th:field="*{numberOfQuestions}" min="3" max="10" required>
+                                    <span class="text-danger" th:if="${#fields.hasErrors('numberOfQuestions')}"
+                                          th:errors="*{numberOfQuestions}"></span>
                                 </div>
                             </div>
                             <h5 class="card-title">Выберете типы вопросов:</h5>

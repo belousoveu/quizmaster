@@ -1,4 +1,4 @@
-package org.skypro.be.quizmaster.service.questionService;
+package org.skypro.be.quizmaster.service.question;
 
 import org.skypro.be.quizmaster.model.Question;
 import org.skypro.be.quizmaster.model.QuestionType;
@@ -6,16 +6,16 @@ import org.skypro.be.quizmaster.model.Section;
 import org.skypro.be.quizmaster.repository.QuestionRepository;
 import org.skypro.be.quizmaster.service.utils.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@Service
+@Component
 public abstract class ManualQuestionService implements QuestionService {
-    protected Section section;
+    private Section section;
 
     @Autowired
     private QuestionRepository questionRepository;
@@ -69,4 +69,3 @@ public abstract class ManualQuestionService implements QuestionService {
                 );
     }
 }
-

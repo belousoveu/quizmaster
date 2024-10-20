@@ -1,9 +1,11 @@
 package org.skypro.be.quizmaster.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
+@Data
 @Entity
 public class Result {
 
@@ -21,14 +23,15 @@ public class Result {
     private LocalDateTime examPassed;
 
     @Column
-    private Long totalQuestions;
+    private long totalQuestions;
 
     @Column
-    private Long correctAnswers;
+    private long correctAnswers;
 
-    public Result() {}
+    public Result() {
+    }
 
-    public Result(Long userId, String description, LocalDateTime examPassed, Long totalQuestions, Long correctAnswers) {
+    public Result(Long userId, String description, LocalDateTime examPassed, long totalQuestions, long correctAnswers) {
         this.userId = userId;
         this.description = description;
         this.examPassed = examPassed;
@@ -36,51 +39,4 @@ public class Result {
         this.correctAnswers = correctAnswers;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public LocalDateTime getExamPassed() {
-        return examPassed;
-    }
-
-    public void setExamPassed(LocalDateTime examPassed) {
-        this.examPassed = examPassed;
-    }
-
-    public long getTotalQuestions() {
-        return totalQuestions;
-    }
-
-    public void setTotalQuestions(Long totalQuestions) {
-        this.totalQuestions = totalQuestions;
-    }
-
-    public long getCorrectAnswers() {
-        return correctAnswers;
-    }
-
-    public void setCorrectAnswers(Long correctAnswers) {
-        this.correctAnswers = correctAnswers;
-    }
 }

@@ -17,7 +17,7 @@
                             <h5 th:text="'Вопрос №' + ${iter.index + 1}" class="text-left mt-2"></h5>
                             <div class="card text-bg-info mx-2">
                                 <div class="card-body">
-                                    <p th:text="${question.textQuestion}"></p>
+                                    <p th:utext="${question.textQuestion}"></p>
                                 </div>
 
                                 <div th:if="${question.questionType==T(org.skypro.be.quizmaster.model.QuestionType).OPEN_QUESTION}"

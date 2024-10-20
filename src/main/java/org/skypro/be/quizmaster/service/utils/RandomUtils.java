@@ -7,10 +7,6 @@ public class RandomUtils {
     static final Random random = new Random();
 
     public static <T> T getRandomElement(Collection<T> collection) {
-//        List<T> list = new ArrayList<>();
-//        for (T t : iterable) {
-//            list.add(t);
-//        }
         if (collection != null) {
             List<T> list = new ArrayList<>(collection);
             return list.get(random.nextInt(list.size()));

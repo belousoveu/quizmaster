@@ -1,9 +1,13 @@
 package org.skypro.be.quizmaster.model;
 
+import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+@Data
 public class ExamQuestion {
     private String textQuestion;
     private QuestionType questionType;
@@ -12,9 +16,6 @@ public class ExamQuestion {
     private List<Answer> correctAnswers;
     private List<Answer> userAnswers = new ArrayList<>();
 
-    public ExamQuestion() {
-    }
-
     public ExamQuestion(Question question) {
         this.textQuestion = question.getTextQuestion();
         this.questionType = question.getQuestionType();
@@ -22,54 +23,6 @@ public class ExamQuestion {
         this.correct = false;
         this.correctAnswers = question.getAnswers();
         this.userAnswers = setBlankUserAnswers(question.getAnswers());
-    }
-
-    public String getTextQuestion() {
-        return textQuestion;
-    }
-
-    public void setTextQuestion(String textQuestion) {
-        this.textQuestion = textQuestion;
-    }
-
-    public QuestionType getQuestionType() {
-        return questionType;
-    }
-
-    public void setQuestionType(QuestionType questionType) {
-        this.questionType = questionType;
-    }
-
-    public Section getSection() {
-        return section;
-    }
-
-    public void setSection(Section section) {
-        this.section = section;
-    }
-
-    public List<Answer> getCorrectAnswers() {
-        return correctAnswers;
-    }
-
-    public void setCorrectAnswers(List<Answer> correctAnswers) {
-        this.correctAnswers = correctAnswers;
-    }
-
-    public List<Answer> getUserAnswers() {
-        return userAnswers;
-    }
-
-    public void setUserAnswers(List<Answer> userAnswers) {
-        this.userAnswers = userAnswers;
-    }
-
-    public Boolean getCorrect() {
-        return correct;
-    }
-
-    public void setCorrect(Boolean correct) {
-        this.correct = correct;
     }
 
     public void updateUserAnswers(List<String> answers) {

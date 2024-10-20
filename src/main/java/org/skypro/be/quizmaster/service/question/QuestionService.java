@@ -1,4 +1,4 @@
-package org.skypro.be.quizmaster.service.questionService;
+package org.skypro.be.quizmaster.service.question;
 
 import org.skypro.be.quizmaster.model.Question;
 import org.skypro.be.quizmaster.model.QuestionType;
@@ -18,7 +18,7 @@ public interface QuestionService {
 
     void deleteQuestion(Long id);
 
-    Question getRandomQuestion(QuestionType questionTypes);
+    Question getRandomQuestion(QuestionType questionType);
 
     Map<String, String> getQuestionTypesStatistics();
 }

@@ -1,25 +1,19 @@
-package org.skypro.be.quizmaster.service.questionService;
+package org.skypro.be.quizmaster.service.question;
 
 import org.skypro.be.quizmaster.exception.GetListDynamicQuestionsException;
 import org.skypro.be.quizmaster.model.Question;
 import org.skypro.be.quizmaster.model.QuestionType;
 import org.skypro.be.quizmaster.model.Section;
-import org.skypro.be.quizmaster.repository.QuestionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
 public abstract class DynamicQuestionService implements QuestionService {
-    protected Section section;
-
-    @Autowired
-    private QuestionRepository questionRepository;
+    private Section section;
 
     public DynamicQuestionService() {
     }
@@ -33,6 +27,7 @@ public abstract class DynamicQuestionService implements QuestionService {
         throw new GetListDynamicQuestionsException(section.getDescription());
     }
 
+    @Override
     public Question createQuestion() {
         throw new UnsupportedOperationException();
     }

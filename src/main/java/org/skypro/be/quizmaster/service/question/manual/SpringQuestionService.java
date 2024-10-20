@@ -1,7 +1,8 @@
-package org.skypro.be.quizmaster.service.questionService;
+package org.skypro.be.quizmaster.service.question.manual;
 
 import org.skypro.be.quizmaster.annotation.QuestionServiceSection;
 import org.skypro.be.quizmaster.model.Section;
+import org.skypro.be.quizmaster.service.question.ManualQuestionService;
 import org.springframework.stereotype.Service;
 
 @Service

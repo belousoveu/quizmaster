@@ -23,11 +23,18 @@
                             <input type="hidden" th:field="*{id}" class="form-control" id="QuestionId"
                                    placeholder="QuestionId">
                             <label for="textQuestion">Введите текст вопроса</label>
+
                             <textarea class="form-control" name="textQuestion" id="textQuestion" placeholder="Вопрос"
                                       rows="6"
                                       th:field="*{textQuestion}">
-                    </textarea><br>
+
+                            </textarea>
+                            <span class="text-danger" th:if="${#fields.hasErrors('textQuestion')}"
+                                  th:errors="*{textQuestion}"></span>
+                            <br>
                             <div id="answerContainer">
+                                <span class="text-danger" th:if="${#fields.hasErrors('answers')}"
+                                      th:errors="*{answers}"></span>
                                 <div th:if="${#sets.isEmpty(question.answers)}" class="row">
                                     <div class="col-1">
                                         <input type="checkbox" name="answers[0].isCorrect"
@@ -100,14 +107,14 @@
 
                 var inputText = document.createElement('input');
                 inputText.type = 'text';
-                inputText.name = 'answers['+ index + '].textAnswer';
+                inputText.name = 'answers[' + index + '].textAnswer';
                 inputText.className = 'textAnswer form-control';
 
                 inputDiv.appendChild(inputText);
 
                 var inputCheckbox = document.createElement('input');
                 inputCheckbox.type = 'checkbox';
-                inputCheckbox.name = 'answers['+ index + '].isCorrect';
+                inputCheckbox.name = 'answers[' + index + '].isCorrect';
                 inputCheckbox.className = 'isCorrect form-check-input';
                 inputCheckbox.checked = false;
 
@@ -117,7 +124,7 @@
                 deleteButton.type = 'button';
                 deleteButton.className = 'btn btn-danger btn-sm delete-btn';
                 deleteButton.innerText = 'Удалить';
-                deleteButton.onclick = function() {
+                deleteButton.onclick = function () {
                     deleteAnswer(this);
                 };
                 buttonDiv.appendChild(deleteButton);
@@ -131,6 +138,7 @@
 
                 container.appendChild(newAnswerDiv);
             }
+
             function deleteAnswer(button) {
                 var container = document.getElementById('answerContainer');
                 var buttonDiv = button.parentNode;

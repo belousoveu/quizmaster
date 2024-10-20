@@ -1,29 +1,36 @@
 package org.skypro.be.quizmaster.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 
+@Getter
 @Entity
 public class Question {
 
+    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
     @Column
     private String textQuestion;
 
     @ElementCollection(fetch = FetchType.EAGER)
     private List<Answer> answers = new ArrayList<>();
 
+    @Setter
     @Column
     @Enumerated(EnumType.STRING)
     private Section section;
 
+    @Setter
     @Column
     @Enumerated(EnumType.STRING)
     private QuestionType questionType;
@@ -37,26 +44,6 @@ public class Question {
         this.section = section;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTextQuestion() {
-        return textQuestion;
-    }
-
-    public void setTextQuestion(String textQuestion) {
-        this.textQuestion = textQuestion;
-    }
-
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
     public void setAnswers(List<Answer> answers) {
         this.answers = answers;
         if (answers.size() == 1) {
@@ -68,22 +55,6 @@ public class Question {
         } else {
             throw new IllegalStateException("Question type is unknown. Данная ошибка не должна появляться"); // TODO Сделать отдельное исключение
         }
-    }
-
-    public Section getSection() {
-        return section;
-    }
-
-    public void setSection(Section section) {
-        this.section = section;
-    }
-
-    public QuestionType getQuestionType() {
-        return questionType;
-    }
-
-    public void setQuestionType(QuestionType questionType) {
-        this.questionType = questionType;
     }
 
     @Override

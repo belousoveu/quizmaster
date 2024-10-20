@@ -3,10 +3,9 @@ package org.skypro.be.quizmaster.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.skypro.be.quizmaster.model.User;
-import org.skypro.be.quizmaster.service.userService.UserService;
+import org.skypro.be.quizmaster.service.user.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,10 +15,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/register")
 public class RegistrationController {
 
-    private static final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
+    private static final Logger logger = LoggerFactory.getLogger(RegistrationController.class); //TODO Заменить на аннотацию и добавить логирование
 
-    @Autowired
-    private UserService userService; //TODO Поменять на интерфейс
+    private final UserService userService;
+
+    public RegistrationController(UserService userService) {
+        this.userService = userService;
+    }
 
 
     @GetMapping("")
@@ -33,7 +35,7 @@ public class RegistrationController {
     public String registerUser(@Valid @ModelAttribute("user") User user, BindingResult bindingResult,
                                @RequestParam String repeatPassword, HttpServletRequest request,
                                Model model) {
-        if (userService.findByUsername(user.getUsername()) != null) {
+        if (userService.loadUserByUsername(user.getUsername()) != null) {
             bindingResult.rejectValue("username", "exists",
                     "Пользователь с таким именем уже существует");
         }
@@ -48,7 +50,7 @@ public class RegistrationController {
         userService.registerUser(user);
         userService.authenticate(user.getUsername(), repeatPassword, request);
 
-        return "redirect:/home";
+        return "redirect:/exam";
     }
 
 }

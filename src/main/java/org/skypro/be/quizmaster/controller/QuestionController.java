@@ -1,36 +1,34 @@
 package org.skypro.be.quizmaster.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.skypro.be.quizmaster.converter.QuestionMapper;
 import org.skypro.be.quizmaster.model.Question;
-import org.skypro.be.quizmaster.model.QuestionType;
-import org.skypro.be.quizmaster.model.dto.QuestionDto;
 import org.skypro.be.quizmaster.model.Section;
-import org.skypro.be.quizmaster.service.questionService.QuestionService;
-import org.skypro.be.quizmaster.service.SectionService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.skypro.be.quizmaster.model.dto.QuestionDto;
+import org.skypro.be.quizmaster.service.QuestionServiceFactory;
+import org.skypro.be.quizmaster.service.question.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/question")
 public class QuestionController {
 
-    @Autowired
-    private SectionService sectionService;
+    private final QuestionServiceFactory factory;
 
-    private QuestionService questionService;
+    public QuestionController(QuestionServiceFactory factory) {
+        this.factory = factory;
+    }
 
     @GetMapping("/{section}")
     public String getQuestionsBySection(@PathVariable("section") Section section, Model model, HttpServletRequest request) {
-        questionService = sectionService.getService(section);
+        QuestionService questionService = factory.getService(section);
         model.addAttribute("section", section);
-        request.setAttribute("title", "Раздел: "+section.getDescription());
+        request.setAttribute("title", "Раздел: " + section.getDescription());
         request.setAttribute("types", questionService.getQuestionTypesStatistics());
         model.addAttribute("questions", questionService.getQuestions());
         return "question/questions";
@@ -38,7 +36,7 @@ public class QuestionController {
 
     @GetMapping("/{section}/add")
     public String newQuestion(@PathVariable("section") Section section, Model model) {
-        questionService = sectionService.getService(section);
+        QuestionService questionService = factory.getService(section);
         Question question = questionService.createQuestion();
         model.addAttribute("section", section.getName());
         model.addAttribute("title", "Создание нового вопроса: " + section.getDescription());
@@ -48,7 +46,7 @@ public class QuestionController {
 
     @GetMapping("/{section}/{id}/edit")
     public String editQuestion(@PathVariable("section") Section section, @PathVariable("id") Long id, Model model) {
-        questionService = sectionService.getService(section);
+        QuestionService questionService = factory.getService(section);
         Question question = questionService.getQuestion(id);
         model.addAttribute("section", section.getName());
         model.addAttribute("title", "Редактирование вопроса: " + section.getDescription());
@@ -58,27 +56,29 @@ public class QuestionController {
 
     @GetMapping("/{section}/{id}/delete")
     public String deleteQuestion(@PathVariable("section") Section section, @PathVariable("id") Long id,
-                                 RedirectAttributes redirectAttributes, Model model) {
+                                 RedirectAttributes redirectAttributes) {
 
-        questionService = sectionService.getService(section);
+        QuestionService questionService = factory.getService(section);
         redirectAttributes.addFlashAttribute("deleteMessage", "Удален вопрос id=" + id);
         questionService.deleteQuestion(id);
         return "redirect:/question/" + section.getName();
     }
 
     @PostMapping("/{section}/save")
-    public String addQuestion(@PathVariable("section") Section section, @ModelAttribute("question") QuestionDto questionDto,
+    public String addQuestion(@PathVariable("section") Section section,
+                              @Valid @ModelAttribute("question") QuestionDto questionDto, BindingResult result,
                               RedirectAttributes redirectAttributes, Model model) {
-        List<String> errors = sectionService.errors(questionDto);
-        if (!errors.isEmpty()) { //TODO Переделать валидацию
-            model.addAttribute("errors", errors);
-            model.addAttribute("section", section.getName());
-            model.addAttribute("title", "Добавить в раздел: " + section.getDescription());
+
+        if (result.hasErrors()) {
+            String title = questionDto.getId() == null ? "Создание нового вопроса: " : "Редактирование вопроса: ";
+            model.addAttribute("title", title + section.getDescription());
             model.addAttribute("question", questionDto);
+            model.addAttribute("section", section.getName());
             return "question/question-form";
         }
-        questionService = sectionService.getService(section);
-        String updatedMessage = questionDto.getId()==null ? "Добавлен новый вопрос" : "Изменен вопрос id=" + questionDto.getId();
+
+        QuestionService questionService = factory.getService(section);
+        String updatedMessage = questionDto.getId() == null ? "Добавлен новый вопрос" : "Изменен вопрос id=" + questionDto.getId();
         redirectAttributes.addFlashAttribute("updateMessage", updatedMessage);
         Question question = QuestionMapper.toEntity(questionDto);
         questionService.saveQuestion(question);

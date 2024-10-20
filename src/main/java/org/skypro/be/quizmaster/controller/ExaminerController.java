@@ -7,8 +7,8 @@ import org.skypro.be.quizmaster.model.Question;
 import org.skypro.be.quizmaster.model.User;
 import org.skypro.be.quizmaster.model.dto.ExamSettingDto;
 import org.skypro.be.quizmaster.service.ExaminerService;
-import org.skypro.be.quizmaster.service.userService.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.skypro.be.quizmaster.service.ResultService;
+import org.skypro.be.quizmaster.service.user.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,11 +23,15 @@ import java.util.List;
 @RequestMapping("/exam")
 public class ExaminerController {
 
-    @Autowired
-    private ExaminerService examinerService;
+    private final ExaminerService examinerService;
+    private final ResultService resultService;
+    private final UserService userService;
 
-    @Autowired
-    private UserService userService;
+    public ExaminerController(ExaminerService examinerService, ResultService resultService, UserService userService) {
+        this.examinerService = examinerService;
+        this.resultService = resultService;
+        this.userService = userService;
+    }
 
     @GetMapping("")
     public String viewSetup(Model model) {
@@ -40,9 +44,8 @@ public class ExaminerController {
     public String startExam(@Valid @ModelAttribute("examSettings") ExamSettingDto examSettings, BindingResult result,
                             HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         if (result.hasErrors()) {
-            redirectAttributes.addFlashAttribute("title", "Настройка параметров тестирования");
-            redirectAttributes.addFlashAttribute("examSettings", examSettings);
-            return "redirect: /exam";
+            redirectAttributes.addFlashAttribute("error", "Необходимо выбрать хотя бы один раздел и хотя бы один тип вопроса");
+            return "redirect:/exam";
         }
 
         model.addAttribute("title", "Начало тестирования");
@@ -57,11 +60,11 @@ public class ExaminerController {
     @PostMapping("/result")
     public String startExam(@AuthenticationPrincipal User user, @RequestParam LinkedMultiValueMap<String, String> answers,
                             Model model, HttpSession session) {
-        List<Question> examQuestions = (List<Question>) session.getAttribute("examQuestions");
+        @SuppressWarnings("unchecked") List<Question> examQuestions = (List<Question>) session.getAttribute("examQuestions");
         String description = (String) session.getAttribute("examDescription");
         answers.remove("_csrf");
         List<ExamQuestion> examResults = examinerService.getResult(examQuestions, answers);
-        examinerService.saveResult(user.getId(), examResults, description);
+        resultService.saveResult(user.getId(), examResults, description);
         model.addAttribute("examResults", examResults);
         model.addAttribute("totalQuestions", examResults.size());
         model.addAttribute("correctAnswersCount", examResults.stream().filter(ExamQuestion::getCorrect).count());
@@ -70,11 +73,11 @@ public class ExaminerController {
     }
 
     @GetMapping("/{userId}")
-    public String viewResult(@PathVariable Long userId, Model model) {
+    public String viewUserResults(@PathVariable Long userId, Model model) {
         User user = userService.getUser(userId);
         model.addAttribute("title", "Результаты тестирования:" + user.getUsername());
         model.addAttribute("userId", userId);
-        model.addAttribute("examResults", examinerService.getUserResults(userId));
+        model.addAttribute("examResults", resultService.getUserResults(userId));
         return "exam/user-result";
     }
 

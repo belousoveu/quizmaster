@@ -1,5 +1,8 @@
 package org.skypro.be.quizmaster.model;
 
+import lombok.Getter;
+
+@Getter
 public enum QuestionType {
     OPEN_QUESTION("Открытые вопросы"),
     SINGLE_CHOICE("Вопросы с выбором правильного ответа"),
@@ -7,11 +10,8 @@ public enum QuestionType {
 
     private final String name;
 
-    private QuestionType(String name) {
+    QuestionType(String name) {
         this.name = name;
-    }
-    public String getName() {
-        return name;
     }
 
 }

@@ -1,6 +1,10 @@
 package org.skypro.be.quizmaster.model.dto;
 
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+import org.skypro.be.quizmaster.annotation.HasCorrectAnswer;
 import org.skypro.be.quizmaster.model.Answer;
 import org.skypro.be.quizmaster.model.Section;
 
@@ -8,16 +12,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+@Getter
 public class QuestionDto {
 
-
+    @Setter
     private Long id;
 
     @NotNull(message = "Необходимо заполнить поле")
+    @NotEmpty(message = "Необходимо заполнить поле")
     private String textQuestion;
 
+    @Setter
+    @NotNull(message = "Список ответов не должен быть пустым")
+    @HasCorrectAnswer(message = "В списке ответов должен быть как минимум один правильный")
     private List<Answer> answers = new ArrayList<>();
 
+    @Setter
     @NotNull(message = "Необходимо заполнить поле")
     private Section section;
 
@@ -28,39 +38,12 @@ public class QuestionDto {
         this.textQuestion = "";
         this.answers = new ArrayList<>();
         this.section = section;
-    }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTextQuestion() {
-        return textQuestion;
     }
 
     public void setTextQuestion(String textQuestion) {
 
-        this.textQuestion = textQuestion.replaceAll("\n","<br>");
-    }
-
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
-    }
-
-    public Section getSection() {
-        return section;
-    }
-
-    public void setSection(Section section) {
-        this.section = section;
+        this.textQuestion = textQuestion.replaceAll("\n", "<br>");
     }
 
     public String toString() {
