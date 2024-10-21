@@ -3,6 +3,7 @@ package org.skypro.be.quizmaster.model;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
+import org.skypro.be.quizmaster.exception.InvalidSectionException;
 
 public enum Section {
 
@@ -37,7 +38,7 @@ public enum Section {
                 return section;
             }
         }
-        throw new IllegalArgumentException("Неизвестное имя раздела: " + name + "\nДанная ошибка не должна появляться"); //TODO сделать отдельное исключение
+        throw new InvalidSectionException("Неизвестное имя раздела: " + name);
     }
 
 }

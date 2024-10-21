@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -69,6 +70,11 @@ public class UserServiceImp implements UserService {
     @Override
     public User getUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }
+
+    @Override
+    public List<User> getUsers() {
+        return userRepository.findAll();
     }
 
     @Override

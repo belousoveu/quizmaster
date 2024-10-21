@@ -3,6 +3,7 @@ package org.skypro.be.quizmaster.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.skypro.be.quizmaster.exception.InvalidAnswerListException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,7 @@ public class Question {
         } else if (answers.stream().filter(Answer::isCorrect).count() > 1) {
             setQuestionType(QuestionType.MULTIPLE_CHOICE);
         } else {
-            throw new IllegalStateException("Question type is unknown. Данная ошибка не должна появляться"); // TODO Сделать отдельное исключение
+            throw new InvalidAnswerListException("Question type is unknown. Question: " + this);
         }
     }
 

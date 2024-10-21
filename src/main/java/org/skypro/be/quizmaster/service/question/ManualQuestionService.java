@@ -46,7 +46,7 @@ public abstract class ManualQuestionService implements QuestionService {
 
     @Override
     public Question getQuestion(Long id) {
-        return questionRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Question not found"));
+        return questionRepository.findById(id).orElseThrow(() -> new NullPointerException("Question not found"));
     }
 
     @Override
@@ -57,7 +57,7 @@ public abstract class ManualQuestionService implements QuestionService {
     public Question getRandomQuestion(QuestionType questionType) {
         List<Long> ids = questionRepository.findIdsBySectionAndType(section, questionType);
         Long randomId = RandomUtils.getRandomElement(ids);
-        return questionRepository.findById(randomId).orElseThrow(() -> new IllegalArgumentException("Question not found"));
+        return getQuestion(randomId);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package org.skypro.be.quizmaster.service;
 
+import lombok.extern.slf4j.Slf4j;
+import org.skypro.be.quizmaster.exception.NotEnoughQuestionsException;
 import org.skypro.be.quizmaster.model.ExamQuestion;
 import org.skypro.be.quizmaster.model.Question;
 import org.skypro.be.quizmaster.model.QuestionType;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+@Slf4j
 @Service
 public class ExaminerServiceImp implements ExaminerService {
 
@@ -40,8 +43,7 @@ public class ExaminerServiceImp implements ExaminerService {
                 .toList();
 
         if (!checkingEnoughQuestions(examSettings.getNumberOfQuestions(), selectedSections, selectedTypes)) {
-            throw new IllegalArgumentException("Not enough questions for the exam"); //TODO: добавить отдельное исключение и обработать его.
-            // Не хватает вопросов в базе
+            throw new NotEnoughQuestionsException(examSettings.getNumberOfQuestions(), selectedSections, selectedTypes);
         }
 
         while (questions.size() < examSettings.getNumberOfQuestions()) {
@@ -51,7 +53,8 @@ public class ExaminerServiceImp implements ExaminerService {
             try {
                 questions.add(questionService.getRandomQuestion(randomType));
             } catch (
-                    IllegalArgumentException ignored) { //TODO: создать отдельный класс ошибок для случая если подходящего вопроса нет в базе
+                    NullPointerException ignored) {
+                log.warn("Нет подходящего вопроса в БД. Раздел: {}, Тип вопроса: {}", randomSection, randomType);
             }
         }
 

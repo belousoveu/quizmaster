@@ -2,20 +2,18 @@ package org.skypro.be.quizmaster.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.skypro.be.quizmaster.model.User;
 import org.skypro.be.quizmaster.service.user.UserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @Controller
 @RequestMapping("/register")
 public class RegistrationController {
-
-    private static final Logger logger = LoggerFactory.getLogger(RegistrationController.class); //TODO Заменить на аннотацию и добавить логирование
 
     private final UserService userService;
 
@@ -49,6 +47,7 @@ public class RegistrationController {
         }
         userService.registerUser(user);
         userService.authenticate(user.getUsername(), repeatPassword, request);
+        log.info("User {} successfully registered", user.getUsername());
 
         return "redirect:/exam";
     }

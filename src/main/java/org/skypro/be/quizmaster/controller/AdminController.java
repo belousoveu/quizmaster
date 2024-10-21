@@ -1,6 +1,5 @@
 package org.skypro.be.quizmaster.controller;
 
-import org.skypro.be.quizmaster.repository.UserRepository;
 import org.skypro.be.quizmaster.service.user.UserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -14,18 +13,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
-    private final UserRepository userRepository;
-
     private final UserService userService;
 
-    public AdminController(UserRepository userRepository, UserService userService) {
-        this.userRepository = userRepository;
+    public AdminController(UserService userService) {
         this.userService = userService;
     }
 
     @GetMapping("/admin/users")
     public String listUsers(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userService.getUsers());
         return "admin/users";
     }
 

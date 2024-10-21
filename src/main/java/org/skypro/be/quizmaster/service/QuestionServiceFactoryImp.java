@@ -1,6 +1,7 @@
 package org.skypro.be.quizmaster.service;
 
 import org.skypro.be.quizmaster.annotation.QuestionServiceSection;
+import org.skypro.be.quizmaster.exception.InvalidQuestionServiceException;
 import org.skypro.be.quizmaster.model.Section;
 import org.skypro.be.quizmaster.service.question.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class QuestionServiceFactoryImp implements QuestionServiceFactory {
     private Section getSection(QuestionService service) {
         QuestionServiceSection annotation = service.getClass().getAnnotation(QuestionServiceSection.class);
         if (annotation == null) {
-            throw new IllegalArgumentException("Service is not annotated with @QuestionService"); //TODO: Сделать отдельный класс. Ошибка не должна появляться
+            throw new InvalidQuestionServiceException("Service is not annotated with @QuestionService" + service.getClass().getName());
         }
         return annotation.value();
     }
