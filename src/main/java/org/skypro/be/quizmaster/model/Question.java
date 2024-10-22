@@ -17,7 +17,7 @@ public class Question {
     @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Setter
     @Column

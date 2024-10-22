@@ -2,7 +2,6 @@ package org.skypro.be.quizmaster.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.skypro.be.quizmaster.exception.NotEnoughQuestionsException;
-import org.skypro.be.quizmaster.model.ExamQuestion;
 import org.skypro.be.quizmaster.model.Question;
 import org.skypro.be.quizmaster.model.QuestionType;
 import org.skypro.be.quizmaster.model.Section;
@@ -12,7 +11,10 @@ import org.skypro.be.quizmaster.service.question.QuestionService;
 import org.skypro.be.quizmaster.service.utils.RandomUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -61,18 +63,6 @@ public class ExaminerServiceImp implements ExaminerService {
         return questions.stream().toList();
     }
 
-    @Override
-    public List<ExamQuestion> getResult(List<Question> questions, Map<String, List<String>> answers) {
-        List<ExamQuestion> examQuestions = new ArrayList<>();
-
-        for (int i = 0; i < questions.size(); i++) {
-            ExamQuestion examQuestion = new ExamQuestion(questions.get(i));
-            examQuestion.updateUserAnswers(answers.get("answer_" + i));
-            examQuestion.validateAnswer();
-            examQuestions.add(examQuestion);
-        }
-        return examQuestions;
-    }
 
     @Override
     public String getExamDescription(ExamSettingDto examSettings) {

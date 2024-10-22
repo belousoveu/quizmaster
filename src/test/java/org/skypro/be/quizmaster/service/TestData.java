@@ -76,4 +76,28 @@ public class TestData {
     }
 
 
+    public static ExamQuestion getMockExamQuestion(Section section, QuestionType type, boolean correct) {
+        ExamQuestion question = switch (type) {
+            case OPEN_QUESTION -> getMockExamOpenQuestion(section);
+            case SINGLE_CHOICE -> getMockExamSingleChoiceQuestion(section);
+            case MULTIPLE_CHOICE -> getMockExamMultipleChoiceQuestion(section);
+        };
+
+        question.setCorrect(correct);
+
+        return question;
+    }
+
+    private static ExamQuestion getMockExamOpenQuestion(Section section) {
+        return new ExamQuestion(getMockOpenQuestion(section));
+    }
+
+    private static ExamQuestion getMockExamSingleChoiceQuestion(Section section) {
+        return new ExamQuestion(getMockSingleChoiceQuestion(section));
+    }
+
+    private static ExamQuestion getMockExamMultipleChoiceQuestion(Section section) {
+        return new ExamQuestion(getMockMultipleChoiceQuestion(section));
+    }
+
 }

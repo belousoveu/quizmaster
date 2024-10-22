@@ -63,7 +63,7 @@ public class ExaminerController {
         @SuppressWarnings("unchecked") List<Question> examQuestions = (List<Question>) session.getAttribute("examQuestions");
         String description = (String) session.getAttribute("examDescription");
         answers.remove("_csrf");
-        List<ExamQuestion> examResults = examinerService.getResult(examQuestions, answers);
+        List<ExamQuestion> examResults = resultService.getResult(examQuestions, answers);
         resultService.saveResult(user.getId(), examResults, description);
         model.addAttribute("examResults", examResults);
         model.addAttribute("totalQuestions", examResults.size());
