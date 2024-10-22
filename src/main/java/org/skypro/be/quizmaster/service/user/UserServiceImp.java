@@ -51,10 +51,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public void changeUserRole(Long id, String role) {
-        User user = userRepository.findById(id).orElseThrow(() -> {
-            log.info("User with id {} not found", id);
-            return new UsernameNotFoundException("User not found");
-        });
+        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         user.setRoles(Collections.singleton("ROLE_" + role));
         log.info("User role changed: {}", user);
         userRepository.save(user);

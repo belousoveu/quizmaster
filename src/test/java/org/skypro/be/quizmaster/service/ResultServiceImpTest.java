@@ -6,7 +6,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.skypro.be.quizmaster.model.*;
+import org.skypro.be.quizmaster.model.ExamQuestion;
+import org.skypro.be.quizmaster.model.Question;
+import org.skypro.be.quizmaster.model.Result;
 import org.skypro.be.quizmaster.repository.ResultsRepository;
 
 import java.time.LocalDateTime;
@@ -21,7 +23,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.skypro.be.quizmaster.model.QuestionType.*;
 import static org.skypro.be.quizmaster.model.Section.*;
-import static org.skypro.be.quizmaster.service.TestData.*;
+import static org.skypro.be.quizmaster.service.TestData.CORRECT_ANSWER;
+import static org.skypro.be.quizmaster.service.TestData.INCORRECT_ANSWER;
 
 @ExtendWith(MockitoExtension.class)
 class ResultServiceImpTest {

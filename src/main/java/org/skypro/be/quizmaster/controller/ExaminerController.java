@@ -9,6 +9,7 @@ import org.skypro.be.quizmaster.model.dto.ExamSettingDto;
 import org.skypro.be.quizmaster.service.ExaminerService;
 import org.skypro.be.quizmaster.service.ResultService;
 import org.skypro.be.quizmaster.service.user.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -73,9 +74,9 @@ public class ExaminerController {
     }
 
     @GetMapping("/{userId}")
-    public String viewUserResults(@PathVariable Long userId, Model model) {
-        User user = userService.getUser(userId);
-        model.addAttribute("title", "Результаты тестирования:" + user.getUsername());
+    @PreAuthorize("hasRole('ADMIN') or #user.id == #userId")
+    public String viewUserResults(@AuthenticationPrincipal User user, @PathVariable Long userId, Model model) {
+        model.addAttribute("title", "Результаты тестирования: " + userService.getUser(userId).getUsername());
         model.addAttribute("userId", userId);
         model.addAttribute("examResults", resultService.getUserResults(userId));
         return "exam/user-result";

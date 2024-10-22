@@ -5,14 +5,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.skypro.be.quizmaster.exception.QuestionNotFoundException;
 import org.skypro.be.quizmaster.model.Question;
 import org.skypro.be.quizmaster.repository.QuestionRepository;
-import org.skypro.be.quizmaster.service.utils.RandomUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -32,12 +33,10 @@ class JavaQuestionServiceTest {
 
     List<Question> questions;
 
-    RandomUtils randomUtils = new RandomUtils();
 
     @BeforeEach
     public void setUp() {
         questions = new ArrayList<>();
-        randomUtils.setRandom(new Random());
     }
 
     @Test
@@ -112,12 +111,8 @@ class JavaQuestionServiceTest {
     void getRandomQuestion_test() {
         Question expected = getMockQuestion(JAVA, OPEN_QUESTION);
         expected.setId(1L);
-        List<Long> ids = List.of(1L, 2L, 3L);
-        when(repository.findIdsBySectionAndType(JAVA, OPEN_QUESTION)).thenReturn(ids);
-        try (MockedStatic<RandomUtils> randomUtils = mockStatic(RandomUtils.class)) {
-            randomUtils.when(() -> RandomUtils.getRandomElement(ids)).thenReturn(1L);
-        }
-        when(repository.findById(1L)).thenReturn(Optional.of(expected));
+        when(repository.findIdsBySectionAndType(JAVA, OPEN_QUESTION)).thenReturn(List.of(1L, 2L, 5L));
+        when(repository.findById(anyLong())).thenReturn(Optional.of(expected));
 
         Question actual = out.getRandomQuestion(OPEN_QUESTION);
 

@@ -1,20 +1,14 @@
 package org.skypro.be.quizmaster.service;
 
 import org.skypro.be.quizmaster.model.*;
-import org.skypro.be.quizmaster.service.question.QuestionService;
-import org.skypro.be.quizmaster.service.question.dynamic.MathQuestionService;
-import org.skypro.be.quizmaster.service.question.manual.JavaQuestionService;
-import org.skypro.be.quizmaster.service.question.manual.SpringQuestionService;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class TestData {
     public static final Answer CORRECT_ANSWER = new Answer("Correct Answer", true);
     public static final Answer INCORRECT_ANSWER = new Answer("Incorrect Answer ", false);
 
-    public static final Question JAVA_QUESTION = new Question(Section.JAVA);
-    public static final Question SPRING_QUESTION = new Question(Section.SPRING);
     public static final Question MATH_QUESTION = new Question(Section.MATH);
 
     public static final User USER1 = new User();
@@ -24,21 +18,19 @@ public class TestData {
 
     public static final String QUESTION_TEXT = "Question Text";
 
-    public static final Map<Section, QuestionService> QUESTION_SERVICES = Map.of(
-            Section.JAVA, new JavaQuestionService(),
-            Section.SPRING, new SpringQuestionService(),
-            Section.MATH, new MathQuestionService());
-
-
     static {
         USER1.setId(1L);
         USER1.setUsername("user1");
         USER1.setPassword("password");
+        USER1.setRoles(Collections.singleton("ROLE_USER"));
         USER2.setId(2L);
         USER2.setUsername("user2");
         USER2.setPassword("password");
+        USER2.setRoles(Collections.singleton("ROLE_USER"));
         ADMIN.setId(3L);
         ADMIN.setUsername("root");
+        ADMIN.setPassword("root");
+        ADMIN.setRoles(Collections.singleton("ROLE_ADMIN"));
     }
 
     public static Question getMockQuestion(Section section, QuestionType type) {
