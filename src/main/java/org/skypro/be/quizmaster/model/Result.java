@@ -23,15 +23,15 @@ public class Result {
     private LocalDateTime examPassed;
 
     @Column
-    private long totalQuestions;
+    private int totalQuestions;
 
     @Column
-    private long correctAnswers;
+    private int correctAnswers;
 
     public Result() {
     }
 
-    public Result(Long userId, String description, LocalDateTime examPassed, long totalQuestions, long correctAnswers) {
+    public Result(Long userId, String description, LocalDateTime examPassed, int totalQuestions, int correctAnswers) {
         this.userId = userId;
         this.description = description;
         this.examPassed = examPassed;

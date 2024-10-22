@@ -1,29 +1,37 @@
 package org.skypro.be.quizmaster.service.utils;
 
-import java.util.*;
+import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
+
+@Component
 public class RandomUtils {
 
-    static final Random random = new Random();
+    @Getter
+    private static Random random;
+
+    @Autowired
+    public void setRandom(@Qualifier(value = "randomBean") Random random) {
+        RandomUtils.random = random;
+    }
+
 
     public static <T> T getRandomElement(Collection<T> collection) {
-        if (collection != null) {
-            List<T> list = new ArrayList<>(collection);
-            return list.get(random.nextInt(list.size()));
+        if (collection == null || collection.isEmpty()) {
+            throw new IllegalArgumentException("Collection is null or empty");
         }
-        throw new NullPointerException();
+        List<T> list = new ArrayList<>(collection);
+        return list.get(random.nextInt(list.size()));
     }
 
     public static int getRandomIntWithinRange(int target, int deviation) {
         return random.nextInt(((target + deviation) - (target - deviation) + 1)) + (target - deviation);
     }
 
-    public static Set<Integer> getRandomIntSetWithinRange(int target, int deviation, int size) {
-        Set<Integer> resultSet = new HashSet<>();
-        resultSet.add(target);
-        while (resultSet.size() <= size) {
-            resultSet.add(getRandomIntWithinRange(target, deviation));
-        }
-        return resultSet;
-    }
 }

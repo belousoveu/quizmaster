@@ -51,7 +51,10 @@ public class UserServiceImp implements UserService {
 
     @Override
     public void changeUserRole(Long id, String role) {
-        User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        User user = userRepository.findById(id).orElseThrow(() -> {
+            log.info("User with id {} not found", id);
+            return new UsernameNotFoundException("User not found");
+        });
         user.setRoles(Collections.singleton("ROLE_" + role));
         log.info("User role changed: {}", user);
         userRepository.save(user);
@@ -69,7 +72,10 @@ public class UserServiceImp implements UserService {
 
     @Override
     public User getUser(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+        return userRepository.findById(userId).orElseThrow(() -> {
+            log.info("User with id {} not found", userId);
+            return new UsernameNotFoundException("User not found");
+        });
     }
 
     @Override
@@ -81,6 +87,7 @@ public class UserServiceImp implements UserService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
         if (user == null) {
+            log.info("User not found: {}", username);
             throw new UsernameNotFoundException("User not found");
         }
         return user;

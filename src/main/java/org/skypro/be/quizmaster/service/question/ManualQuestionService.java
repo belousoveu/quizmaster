@@ -1,5 +1,6 @@
 package org.skypro.be.quizmaster.service.question;
 
+import org.skypro.be.quizmaster.exception.QuestionNotFoundException;
 import org.skypro.be.quizmaster.model.Question;
 import org.skypro.be.quizmaster.model.QuestionType;
 import org.skypro.be.quizmaster.model.Section;
@@ -46,7 +47,7 @@ public abstract class ManualQuestionService implements QuestionService {
 
     @Override
     public Question getQuestion(Long id) {
-        return questionRepository.findById(id).orElseThrow(() -> new NullPointerException("Question not found"));
+        return questionRepository.findById(id).orElseThrow(() -> new QuestionNotFoundException(id));
     }
 
     @Override

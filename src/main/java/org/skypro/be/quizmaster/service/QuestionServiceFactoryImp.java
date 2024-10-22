@@ -1,5 +1,6 @@
 package org.skypro.be.quizmaster.service;
 
+import lombok.Getter;
 import org.skypro.be.quizmaster.annotation.QuestionServiceSection;
 import org.skypro.be.quizmaster.exception.InvalidQuestionServiceException;
 import org.skypro.be.quizmaster.model.Section;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Getter
 @Component
 public class QuestionServiceFactoryImp implements QuestionServiceFactory {
 
@@ -32,7 +34,7 @@ public class QuestionServiceFactoryImp implements QuestionServiceFactory {
     private Section getSection(QuestionService service) {
         QuestionServiceSection annotation = service.getClass().getAnnotation(QuestionServiceSection.class);
         if (annotation == null) {
-            throw new InvalidQuestionServiceException("Service is not annotated with @QuestionService" + service.getClass().getName());
+            throw new InvalidQuestionServiceException(service.getClass());
         }
         return annotation.value();
     }

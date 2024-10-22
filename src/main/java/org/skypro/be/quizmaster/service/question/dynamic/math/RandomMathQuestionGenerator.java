@@ -1,17 +1,30 @@
 package org.skypro.be.quizmaster.service.question.dynamic.math;
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
 import java.util.Random;
 
+@Slf4j
+@Getter
+@Component
 public class RandomMathQuestionGenerator {
 
-    int value1;
-    int value2;
-    Operator operator;
-    int result;
-    String description;
+    private final Random random;
+    private int value1;
+    private int value2;
+    private Operator operator;
+    private int result;
+    private String description;
 
-    public RandomMathQuestionGenerator() {
-        Random random = new Random();
+    public RandomMathQuestionGenerator(@Qualifier(value = "randomBean") Random random) {
+        this.random = random;
+        log.info("Random question generator initialized with randomBean {}", random);
+    }
+
+    public RandomMathQuestionGenerator generate() {
         operator = Operator.values()[random.nextInt(Operator.values().length)];
         value1 = random.nextInt(20);
         value2 = random.nextInt(20);
@@ -24,6 +37,7 @@ public class RandomMathQuestionGenerator {
         }
         result = operator.calculate(value1, value2);
         description = operator.getDescription(value1, value2);
+        return this;
     }
 
     public String toString() {
