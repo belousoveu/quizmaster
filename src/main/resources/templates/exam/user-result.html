@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="~{fragments :: head}"></head>
+<body style="height: 100%">
+<div style="display: flex; flex-direction: column; height: 100vh;">
+    <div th:replace="~{fragments :: header}"></div>
+    <div style="flex: 1; overflow-y: auto; padding: 1rem;">
+
+        <div class="container">
+            <h4 th:text="${title}"></h4>
+        </div>
+        <div class="container">
+            <div th:if="${examResults == null || examResults.isEmpty()}">
+                <h5>Результаты пройденных тестов не найдены</h5>
+            </div>
+            <div th:unless="${examResults == null || examResults.isEmpty()}">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>Номер</th>
+                        <th>Дата</th>
+                        <th>Тест</th>
+                        <th>Количество вопросов</th>
+                        <th>Правильных ответов</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="result : ${examResults}">
+                        <td th:text="${result.id}"></td>
+                        <td th:text="${#temporals.format(result.examPassed, 'dd-MM-yyyy HH:mm')}"></td>
+                        <td th:text="${result.description}"></td>
+                        <td th:text="${result.totalQuestions}"></td>
+                        <td th:text="${result.correctAnswers}"></td>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div th:replace="~{fragments :: footer}"></div>
+</div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head}"></head>
+<body style="height: 100%">
+<div style="display: flex; flex-direction: column; height: 100vh;">
+    <div th:replace="~{fragments :: header}"></div>
+    <div style="flex: 1; overflow-y: auto; padding: 1rem;">
+
+        <div class="container mt-5">
+            <h2 class="text-center">Авторизация пользователя</h2>
+            <form class="row g-3 m-5" th:action="@{/register}" th:object="${user}" method="post">
+                <div class="col-md-6 offset-md-3">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Введите имя пользователя:</label>
+                        <input type="text" class="form-control" id="username" th:field="*{username}" required/>
+                        <span style="color:red" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Введите пароль:</label>
+                        <input type="password" class="form-control" id="password" th:field="*{password}" required/>
+                        <span style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="repeatPassword" class="form-label">Повторите пароль:</label>
+                        <input type="password" class="form-control" id="repeatPassword" name="repeatPassword" required/>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div th:replace="~{fragments :: footer}"></div>
+</div>
+</body>
+</html>
