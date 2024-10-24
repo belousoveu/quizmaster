@@ -94,7 +94,7 @@ class ResultServiceImpTest {
 
         assertNotNull(actual);
         assertEquals(questions.size(), actual.size());
-        assertEquals(2, actual.stream().filter(ExamQuestion::getCorrect).count());
+        assertEquals(2, actual.stream().filter(ExamQuestion::isCorrect).count());
     }
 
     @Test

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 import org.skypro.be.quizmaster.exception.InvalidSectionException;
 
+import java.util.Objects;
+
 public enum Section {
 
     JAVA("java", "Вопросы по Java Core", false),
@@ -34,7 +36,7 @@ public enum Section {
     @JsonCreator
     public static Section getByName(String name) {
         for (Section section : Section.values()) {
-            if (section.getName().equals(name)) {
+            if (Objects.equals(section.getName(), name)) {
                 return section;
             }
         }

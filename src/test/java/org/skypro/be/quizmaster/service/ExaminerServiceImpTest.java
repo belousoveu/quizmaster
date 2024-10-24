@@ -47,8 +47,8 @@ class ExaminerServiceImpTest {
 
     @BeforeEach
     void setUp() {
-        examSettingFullSection = ExamSettingMapper.toDto(new ExamSetting());
-        examSettingOneSection = ExamSettingMapper.toDto(new ExamSetting());
+        examSettingFullSection = ExamSettingMapper.INSTANCE.toDto(new ExamSetting());
+        examSettingOneSection = ExamSettingMapper.INSTANCE.toDto(new ExamSetting());
         Map<Section, Boolean> sections = examSettingOneSection.getSelectedSections();
         sections.put(Section.MATH, false);
         sections.put(Section.SPRING, false);

@@ -12,7 +12,7 @@ public class ExamQuestion {
     private String textQuestion;
     private QuestionType questionType;
     private Section section;
-    private Boolean correct;
+    private boolean correct;
     private List<Answer> correctAnswers;
     private List<Answer> userAnswers = new ArrayList<>();
 
@@ -23,6 +23,14 @@ public class ExamQuestion {
         this.correct = false;
         this.correctAnswers = question.getAnswers();
         this.userAnswers = setBlankUserAnswers(question.getAnswers());
+    }
+
+    public List<Answer> getCorrectAnswers() {
+        return correctAnswers.stream().toList();
+    }
+
+    public List<Answer> getUserAnswers() {
+        return userAnswers.stream().toList();
     }
 
     public void updateUserAnswers(List<String> answers) {

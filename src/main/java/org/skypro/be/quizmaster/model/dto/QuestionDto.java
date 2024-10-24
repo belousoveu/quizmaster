@@ -16,7 +16,7 @@ import java.util.List;
 public class QuestionDto {
 
     @Setter
-    private Long id;
+    private long id;
 
     @NotNull(message = "Необходимо заполнить поле")
     @NotEmpty(message = "Необходимо заполнить поле")
@@ -38,11 +38,9 @@ public class QuestionDto {
         this.textQuestion = "";
         this.answers = new ArrayList<>();
         this.section = section;
-
     }
 
     public void setTextQuestion(String textQuestion) {
-
         this.textQuestion = textQuestion.replaceAll("\n", "<br>");
     }
 

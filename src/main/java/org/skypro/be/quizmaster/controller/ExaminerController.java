@@ -68,7 +68,7 @@ public class ExaminerController {
         resultService.saveResult(user.getId(), examResults, description);
         model.addAttribute("examResults", examResults);
         model.addAttribute("totalQuestions", examResults.size());
-        model.addAttribute("correctAnswersCount", examResults.stream().filter(ExamQuestion::getCorrect).count());
+        model.addAttribute("correctAnswersCount", examResults.stream().filter(ExamQuestion::isCorrect).count());
 
         return "exam/result";
     }

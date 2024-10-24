@@ -45,7 +45,7 @@ public class ResultServiceImp implements ResultService {
                 description,
                 now,
                 examResults.size(),
-                (int) examResults.stream().filter(ExamQuestion::getCorrect).count());
+                (int) examResults.stream().filter(ExamQuestion::isCorrect).count());
         resultsRepository.save(result);
     }
 }

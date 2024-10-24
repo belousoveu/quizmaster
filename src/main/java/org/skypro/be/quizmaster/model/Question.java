@@ -45,6 +45,10 @@ public class Question {
         this.section = section;
     }
 
+    public List<Answer> getAnswers() {
+        return answers.stream().toList();
+    }
+
     public void setAnswers(List<Answer> answers) {
         this.answers = answers;
         if (answers.size() == 1) {

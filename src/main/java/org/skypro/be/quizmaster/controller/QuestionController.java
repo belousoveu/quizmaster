@@ -70,7 +70,7 @@ public class QuestionController {
                               RedirectAttributes redirectAttributes, Model model) {
 
         if (result.hasErrors()) {
-            String title = questionDto.getId() == null ? "Создание нового вопроса: " : "Редактирование вопроса: ";
+            String title = questionDto.getId() == 0 ? "Создание нового вопроса: " : "Редактирование вопроса: ";
             model.addAttribute("title", title + section.getDescription());
             model.addAttribute("question", questionDto);
             model.addAttribute("section", section.getName());
@@ -78,9 +78,9 @@ public class QuestionController {
         }
 
         QuestionService questionService = factory.getService(section);
-        String updatedMessage = questionDto.getId() == null ? "Добавлен новый вопрос" : "Изменен вопрос id=" + questionDto.getId();
+        String updatedMessage = questionDto.getId() == 0 ? "Добавлен новый вопрос" : "Изменен вопрос id=" + questionDto.getId();
         redirectAttributes.addFlashAttribute("updateMessage", updatedMessage);
-        Question question = QuestionMapper.toEntity(questionDto);
+        Question question = QuestionMapper.INSTANCE.toEntity(questionDto);
         questionService.saveQuestion(question);
         return "redirect:/question/" + section.getName();
     }

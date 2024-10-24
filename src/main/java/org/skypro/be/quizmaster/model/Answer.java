@@ -6,22 +6,30 @@ import lombok.Setter;
 
 import java.util.Objects;
 
-@Setter
 @Getter
+@Setter
 @Embeddable
 public class Answer {
     private String textAnswer;
-    private Boolean isCorrect = false;
+    private boolean isCorrect = false;
 
     public Answer() {
     }
 
-    public Answer(String textAnswer, Boolean isCorrect) {
+    public Answer(String textAnswer, boolean isCorrect) {
         this.textAnswer = textAnswer;
         this.isCorrect = isCorrect;
     }
 
-    public Boolean isCorrect() {
+    public boolean isCorrect() {
+        return isCorrect;
+    }
+
+    public void setIsCorrect(boolean isCorrect) {
+        this.isCorrect = isCorrect;
+    }
+
+    public boolean getIsCorrect() {
         return isCorrect;
     }
 

@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 public class InvalidSectionException extends RuntimeException {
     public InvalidSectionException(String message) {
         super(message);
-        log.error(message);
         throw new RuntimeException(message);
     }
 }
