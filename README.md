@@ -49,11 +49,11 @@ mvn spring-boot:run
 После запуска приложение будет доступно по адресу `http://localhost:8080`
 
 # Лицензия
-Этот проект лицензирован под MIT License.
+Этот проект лицензирован под [MIT License](https://github.com/belousoveu/quizmaster/blob/master/LICENSE.md).
 
 ---
 
-Свяжитесь с нами: Если у вас есть вопросы или предложения, пожалуйста, свяжитесь с нами через GitHub Issues или напрямую через [электронную почту](mailto:belousov.eu@gmail.com).
+Свяжитесь с нами: Если у вас есть вопросы или предложения, пожалуйста, свяжитесь с нами через [GitHub Issues](https://github.com/belousoveu/quizmaster/issues) или напрямую через [электронную почту](mailto:belousov.eu@gmail.com).
 
 ---
 
